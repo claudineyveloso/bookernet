@@ -1,0 +1,8 @@
+[api]
+port = "8080"
+
+[database]
+host = "localhost"
+user = "user_bookernet_development"
+password = "pwd_bookernet_development"
+name = "bookernet_development"

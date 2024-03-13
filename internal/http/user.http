@@ -1,0 +1,37 @@
+
+### Create user
+POST http://localhost:8080/create_user HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "wanderleycardoso@gmail.com",
+  "password": "12345678",
+  "is_active": true,
+  "user_type": "Super Admin"
+}
+
+
+### List users
+GET http://localhost:8080/get_users HTTP/1.1
+
+### Fetch users
+GET http://localhost:8080/get_user?id=703855ff-d928-4229-b3b6-463524c78f88
+
+### Change is_active user
+PUT http://localhost:8080/disable_user
+
+{
+  "id": "bdd24cfa-17b1-4400-9060-0185e69ad64e",
+  "is_active": false
+
+}
+
+### Cahage data user
+PUT http://localhost:8080/date_user
+
+{
+  "id": "bdd24cfa-17b1-4400-9060-0185e69ad64e",
+  "email": "antonioleoncioveloso@gmail.com",
+  "is_active": true,
+  "user_type": "Super Admin"
+}
