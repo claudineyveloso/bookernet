@@ -3,7 +3,11 @@ version: "2"
 sql:
   - engine: "postgresql"
     schema: "api/schema.sql"
-    queries: "api/user.sql"
+    queries: 
+      - "api/user.sql"
+      - "api/owner.sql"
+      - "api/person.sql"
+      - "api/address.sql"
     gen:
       go:
         package: "db"
