@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -26,8 +25,6 @@ type UserRequest struct {
 func CreateUserController(rw http.ResponseWriter, r *http.Request, queries *db.Queries) {
 
 	var createUserRequest UserRequest
-
-	log.Println("Corpo da solicitação:", r.Body)
 
 	if err := json.NewDecoder(r.Body).Decode(&createUserRequest); err != nil {
 		http.Error(rw, "Erro ao decodificar corpo da solicitação"+err.Error(), http.StatusBadRequest)
