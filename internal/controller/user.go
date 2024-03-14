@@ -2,33 +2,41 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/claudineyveloso/bookernet.git/internal/db"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
 
 type UserRequest struct {
 	ID        uuid.UUID `json:"id"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
+	Email     string    `json:"email" validate:"required"`
+	Password  string    `json:"password" validate:"required"`
 	IsActive  bool      `json:"is_active"`
-	UserType  string    `json:"user_type"`
+	UserType  string    `json:"user_type" validate:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func CreateUserController(w http.ResponseWriter, r *http.Request, queries *db.Queries) {
+func CreateUserController(rw http.ResponseWriter, r *http.Request, queries *db.Queries) {
 
 	var createUserRequest UserRequest
 
 	log.Println("Corpo da solicitação:", r.Body)
 
 	if err := json.NewDecoder(r.Body).Decode(&createUserRequest); err != nil {
-		http.Error(w, "Erro ao decodificar corpo da solicitação"+err.Error(), http.StatusBadRequest)
+		http.Error(rw, "Erro ao decodificar corpo da solicitação"+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Validar os campos do usuário antes de continuar
+	if err := createUserRequest.Validate(); err != nil {
+		http.Error(rw, "Erro de validação: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -49,36 +57,67 @@ func CreateUserController(w http.ResponseWriter, r *http.Request, queries *db.Qu
 	}
 
 	if err := queries.CreateUser(r.Context(), createUserParams); err != nil {
-		http.Error(w, "Erro ao criar usuário", http.StatusInternalServerError)
+		http.Error(rw, "Erro ao criar usuário", http.StatusInternalServerError)
 		return
 	}
 
 	// Encode user data in JSON format and send it as a response
-	if err := json.NewEncoder(w).Encode(createUserParams); err != nil {
-		http.Error(w, "Erro ao codificar resposta", http.StatusInternalServerError)
+	if err := json.NewEncoder(rw).Encode(createUserParams); err != nil {
+		http.Error(rw, "Erro ao codificar resposta", http.StatusInternalServerError)
 		return
 	}
 }
 
-func GetUsersController(w http.ResponseWriter, r *http.Request, queries *db.Queries) {
+func (u *UserRequest) Validate() error {
+	validate := validator.New()
+	err := validate.Struct(u)
+	if err != nil {
+		errorMap := make(map[string]string)
+		for _, err := range err.(validator.ValidationErrors) {
+			switch err.Field() {
+			case "Email":
+				errorMap["email"] = "O campo de e-mail não pode estar vazio"
+			case "Password":
+				errorMap["password"] = "O campo de senha não pode estar vazio"
+			case "UserType":
+				errorMap["user_type"] = "O campo de tipo de usuário não pode estar vazio"
+				// Adicionar casos para outros campos, se necessário
+			}
+		}
+		// Construir mensagem de erro concatenando as mensagens de erro específicas
+		var errorMsg string
+		for _, msg := range errorMap {
+			errorMsg += msg + "\n"
+		}
+
+		return errors.New(errorMsg)
+	}
+	return nil
+}
+
+func GetUsersController(rw http.ResponseWriter, r *http.Request, queries *db.Queries) {
 	users, err := queries.GetUsers(r.Context())
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Erro ao obter usuário: %v", err), http.StatusInternalServerError)
+		http.Error(rw, fmt.Sprintf("Erro ao obter usuário: %v", err), http.StatusInternalServerError)
 		return
 	}
 
 	jsonData, err := json.MarshalIndent(users, "", " ")
 	if err != nil {
-		http.Error(w, "Erro ao codificar em JSON", http.StatusInternalServerError)
+		http.Error(rw, "Erro ao codificar em JSON", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
 
-	_, err = w.Write(jsonData)
+	_, err = rw.Write(jsonData)
 	if err != nil {
-		http.Error(w, "Erro ao escrever resposta", http.StatusInternalServerError)
+		http.Error(
+			rw,
+			"Erro ao escrever resposta",
+			http.StatusInternalServerError,
+		)
 		return
 	}
 
