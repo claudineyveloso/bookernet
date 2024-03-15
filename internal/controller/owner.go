@@ -30,9 +30,6 @@ func CreateOwnerController(w http.ResponseWriter, r *http.Request, queries *db.Q
 		return
 	}
 
-	//fmt.Println("createOwnerRequest.Person:", createOwnerRequest.Person)
-	//fmt.Println("createOwnerRequest.Address:", createOwnerRequest.Address)
-
 	createOwnerRequest.ID = uuid.New()
 	now := time.Now()
 
@@ -43,19 +40,6 @@ func CreateOwnerController(w http.ResponseWriter, r *http.Request, queries *db.Q
 		BucketID:   createOwnerRequest.BucketID,
 		CreatedAt:  now,
 		UpdatedAt:  now,
-	}
-
-	createPersonParams := db.CreatePersonParams{
-		ID:             uuid.New(),
-		FirstName:      createOwnerRequest.Person.FirstName,
-		LastName:       createOwnerRequest.Person.LastName,
-		Email:          createOwnerRequest.Person.Email,
-		Phone:          utils.CreateNullString(createOwnerRequest.Person.Phone),
-		CellPhone:      createOwnerRequest.Person.CellPhone,
-		PersonableID:   createOwnerRequest.ID,
-		PersonableType: "owner",
-		CreatedAt:      now,
-		UpdatedAt:      now,
 	}
 
 	createAddressParams := db.CreateAddressParams{
@@ -77,8 +61,8 @@ func CreateOwnerController(w http.ResponseWriter, r *http.Request, queries *db.Q
 		return
 	}
 
-	// Create person of owner
-	if err := queries.CreatePerson(r.Context(), createPersonParams); err != nil {
+	_, err := CreatePersonController(w, r, queries, &createOwnerRequest)
+	if err != nil {
 		http.Error(w, "Erro ao criar a pessoa do proprietário", http.StatusBadRequest)
 		return
 	}

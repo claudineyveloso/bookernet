@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"net/http"
 	"time"
 
@@ -23,36 +22,26 @@ type PersonRequest struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
-func CreatePersonController(w http.ResponseWriter, r *http.Request, queries *db.Queries, ownerID uuid.UUID) error {
-	var createPersonRequest PersonRequest
-	if err := json.NewDecoder(r.Body).Decode(&createPersonRequest); err != nil {
-		http.Error(w, "Erro ao decodificar corpo da solicitação"+err.Error(), http.StatusBadRequest)
-		return err
-	}
-
+func CreatePersonController(w http.ResponseWriter, r *http.Request, queries *db.Queries, createPersonRequest *OwnerRequest) (uuid.UUID, error) {
 	now := time.Now()
-	createPersonParams := CreatePersonParamsFromRequest(createPersonRequest, ownerID, now)
 
-	if err := queries.CreatePerson(r.Context(), createPersonParams); err != nil {
-		http.Error(w, "Erro ao criar a pessoa: %v"+err.Error(), http.StatusBadRequest)
-		return err
-
-	}
-
-	return nil
-}
-
-func CreatePersonParamsFromRequest(req PersonRequest, ownerID uuid.UUID, now time.Time) db.CreatePersonParams {
-	return db.CreatePersonParams{
+	createPersonParams := db.CreatePersonParams{
 		ID:             uuid.New(),
-		FirstName:      req.FirstName,
-		LastName:       req.LastName,
-		Email:          req.Email,
-		Phone:          utils.CreateNullString(req.Phone),
-		CellPhone:      req.CellPhone,
-		PersonableID:   ownerID,
+		FirstName:      createPersonRequest.Person.FirstName,
+		LastName:       createPersonRequest.Person.LastName,
+		Email:          createPersonRequest.Person.Email,
+		Phone:          utils.CreateNullString(createPersonRequest.Person.Phone),
+		CellPhone:      createPersonRequest.Person.CellPhone,
+		PersonableID:   createPersonRequest.ID,
 		PersonableType: "owner",
 		CreatedAt:      now,
 		UpdatedAt:      now,
 	}
+
+	err := queries.CreatePerson(r.Context(), createPersonParams)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return createPersonParams.ID, nil
 }
