@@ -8,7 +8,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/infra/database"
 )
 
-func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+func CreateBucketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := database.OpenConnection()
 	if err != nil {
 		// If an error occurs when opening the connection, send a 500 Internal Server Error to the client
@@ -17,10 +17,10 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 	dbConn := db.New(conn)
-	controller.CreateUserController(w, r, dbConn)
+	controller.CreateBucketController(w, r, dbConn)
 }
 
-func GetUserHandler(w http.ResponseWriter, r *http.Request) {
+func GetBucketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := database.OpenConnection()
 	if err != nil {
 		// If an error occurs when opening the connection, send a 500 Internal Server Error to the client
@@ -29,10 +29,10 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 	dbConn := db.New(conn)
-	controller.GetUserController(w, r, dbConn)
+	controller.GetBucketController(w, r, dbConn)
 }
 
-func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
+func GetBucketsHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := database.OpenConnection()
 	if err != nil {
 		// If an error occurs when opening the connection, send a 500 Internal Server Error to the client
@@ -41,10 +41,10 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 	dbConn := db.New(conn)
-	controller.GetUsersController(w, r, dbConn)
+	controller.GetBucketsController(w, r, dbConn)
 }
 
-func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
+func UpdateBucketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := database.OpenConnection()
 	if err != nil {
 		// If an error occurs when opening the connection, send a 500 Internal Server Error to the client
@@ -53,29 +53,5 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 	dbConn := db.New(conn)
-	controller.UpdateUserController(w, r, dbConn)
-}
-
-func UpdatePasswordUserHandler(w http.ResponseWriter, r *http.Request) {
-	conn, err := database.OpenConnection()
-	if err != nil {
-		// If an error occurs when opening the connection, send a 500 Internal Server Error to the client
-		http.Error(w, "Erro ao abrir a conexão com o banco de dados", http.StatusInternalServerError)
-		return
-	}
-	defer conn.Close()
-	dbConn := db.New(conn)
-	controller.UpdatePasswordController(w, r, dbConn)
-}
-
-func DisableUserHandler(w http.ResponseWriter, r *http.Request) {
-	conn, err := database.OpenConnection()
-	if err != nil {
-		// If an error occurs when opening the connection, send a 500 Internal Server Error to the client
-		http.Error(w, "Erro ao abrir a conexão com o banco de dados", http.StatusInternalServerError)
-		return
-	}
-	defer conn.Close()
-	dbConn := db.New(conn)
-	controller.DisableUserController(w, r, dbConn)
+	controller.UpdateBucketController(w, r, dbConn)
 }

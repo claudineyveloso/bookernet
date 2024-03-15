@@ -25,13 +25,24 @@ type Address struct {
 	UpdatedAt       time.Time      `json:"updated_at"`
 }
 
+type Bucket struct {
+	ID                 uuid.UUID `json:"id"`
+	Description        string    `json:"description"`
+	Name               string    `json:"name"`
+	AwsAccessKeyID     string    `json:"aws_access_key_id"`
+	AwsSecretAccessKey string    `json:"aws_secret_access_key"`
+	AwsRegion          string    `json:"aws_region"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
+
 type Owner struct {
-	ID         uuid.UUID    `json:"id"`
-	PeopleType string       `json:"people_type"`
-	IsActive   sql.NullBool `json:"is_active"`
-	BucketID   uuid.UUID    `json:"bucket_id"`
-	CreatedAt  time.Time    `json:"created_at"`
-	UpdatedAt  time.Time    `json:"updated_at"`
+	ID         uuid.UUID `json:"id"`
+	PeopleType string    `json:"people_type"`
+	IsActive   bool      `json:"is_active"`
+	BucketID   uuid.UUID `json:"bucket_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type Person struct {

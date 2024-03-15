@@ -19,12 +19,12 @@ VALUES ($1, $2, $3, $4, $5, $6)
 `
 
 type CreateOwnerParams struct {
-	ID         uuid.UUID    `json:"id"`
-	PeopleType string       `json:"people_type"`
-	IsActive   sql.NullBool `json:"is_active"`
-	BucketID   uuid.UUID    `json:"bucket_id"`
-	CreatedAt  time.Time    `json:"created_at"`
-	UpdatedAt  time.Time    `json:"updated_at"`
+	ID         uuid.UUID `json:"id"`
+	PeopleType string    `json:"people_type"`
+	IsActive   bool      `json:"is_active"`
+	BucketID   uuid.UUID `json:"bucket_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 func (q *Queries) CreateOwner(ctx context.Context, arg CreateOwnerParams) error {
@@ -44,9 +44,9 @@ UPDATE owners SET is_active = $2, updated_at = $3 WHERE owners.id = $1
 `
 
 type DisableOwnerParams struct {
-	ID        uuid.UUID    `json:"id"`
-	IsActive  sql.NullBool `json:"is_active"`
-	UpdatedAt time.Time    `json:"updated_at"`
+	ID        uuid.UUID `json:"id"`
+	IsActive  bool      `json:"is_active"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (q *Queries) DisableOwner(ctx context.Context, arg DisableOwnerParams) error {
@@ -65,7 +65,7 @@ WHERE owners.id = $1
 type GetOwnerRow struct {
 	ID              uuid.UUID      `json:"id"`
 	PeopleType      string         `json:"people_type"`
-	IsActive        sql.NullBool   `json:"is_active"`
+	IsActive        bool           `json:"is_active"`
 	BucketID        uuid.UUID      `json:"bucket_id"`
 	CreatedAt       time.Time      `json:"created_at"`
 	UpdatedAt       time.Time      `json:"updated_at"`
@@ -137,7 +137,7 @@ JOIN addresses ON owners.id = addresses.addressable_id AND addresses.addressable
 type GetOwnersRow struct {
 	ID              uuid.UUID      `json:"id"`
 	PeopleType      string         `json:"people_type"`
-	IsActive        sql.NullBool   `json:"is_active"`
+	IsActive        bool           `json:"is_active"`
 	BucketID        uuid.UUID      `json:"bucket_id"`
 	CreatedAt       time.Time      `json:"created_at"`
 	UpdatedAt       time.Time      `json:"updated_at"`
@@ -220,11 +220,11 @@ UPDATE owners SET people_type = $2, is_active = $3, bucket_id = $4, updated_at =
 `
 
 type UpdateOwnerParams struct {
-	ID         uuid.UUID    `json:"id"`
-	PeopleType string       `json:"people_type"`
-	IsActive   sql.NullBool `json:"is_active"`
-	BucketID   uuid.UUID    `json:"bucket_id"`
-	UpdatedAt  time.Time    `json:"updated_at"`
+	ID         uuid.UUID `json:"id"`
+	PeopleType string    `json:"people_type"`
+	IsActive   bool      `json:"is_active"`
+	BucketID   uuid.UUID `json:"bucket_id"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 func (q *Queries) UpdateOwner(ctx context.Context, arg UpdateOwnerParams) error {

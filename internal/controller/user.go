@@ -10,6 +10,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/db"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserRequest struct {
@@ -42,11 +43,17 @@ func CreateUserController(rw http.ResponseWriter, r *http.Request, queries *db.Q
 	createUserRequest.CreatedAt = now
 	createUserRequest.UpdatedAt = now
 
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), bcrypt.DefaultCost)
+	if err != nil {
+		fmt.Println("Erro ao gerar hash da senha:", err)
+		return
+	}
+	hashedPasswordString := string(hashedPassword)
 	// Create instance of db.CreateUserParams based on request data
 	createUserParams := db.CreateUserParams{
 		ID:        createUserRequest.ID,
 		Email:     createUserRequest.Email,
-		Password:  createUserRequest.Password,
+		Password:  hashedPasswordString,
 		IsActive:  createUserRequest.IsActive,
 		UserType:  createUserRequest.UserType,
 		CreatedAt: createUserRequest.CreatedAt,
