@@ -30,8 +30,17 @@ func main() {
 	r.HandleFunc("/get_users", handler.GetUsersHandler).Methods("GET")
 	r.HandleFunc("/get_user", handler.GetUserHandler).Methods("GET")
 	r.HandleFunc("/disable_user", handler.DisableUserHandler).Methods("PUT")
-	r.HandleFunc("/update_user", handler.UpdateUsersHandler).Methods("PUT")
-	r.HandleFunc("/update_password_user", handler.UpdatePasswordUsersHandler).Methods("PUT")
+	r.HandleFunc("/update_user", handler.UpdateUserHandler).Methods("PUT")
+	r.HandleFunc("/update_password_user", handler.UpdatePasswordUserHandler).Methods("PUT")
+
+	// Endpoint Bucket
+	r.HandleFunc("/create_bucket", handler.CreateBucketHandler).Methods("POST")
+	r.HandleFunc("/get_buckets", handler.GetBucketsHandler).Methods("GET")
+	r.HandleFunc("/get_bucket", handler.GetBucketHandler).Methods("GET")
+	r.HandleFunc("/update_bucket", handler.UpdateBucketHandler).Methods("PUT")
+
+	// Endpoint Owner
+	r.HandleFunc("/create_owner", handler.CreateOwnerHandler).Methods("POST")
 
 	port := configs.GetServerPort()
 	fmt.Printf("Servidor escutando na porta %s\n", port)

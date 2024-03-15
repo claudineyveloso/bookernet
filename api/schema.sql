@@ -14,11 +14,11 @@ create unique index email_idx on users (email);
 -- Proprietário
 CREATE TABLE owners (
   ID 							UUID PRIMARY KEY,
-  people_type			VARCHAR(1) NOT NULL,
-  is_active 			BOOLEAN DEFAULT TRUE,
-  bucket_id 			UUID NOT NULL,
-  created_at  		TIMESTAMP NOT NULL,
-	updated_at 		 	TIMESTAMP NOT NULL
+  people_type			varchar(1) not null,
+  is_active       boolean not null default true,
+  bucket_id 			UUID not null,
+  created_at      timestamp not null,
+  updated_at      timestamp not null
 );
 
 ALTER TABLE
@@ -29,28 +29,40 @@ ADD
 -- Pessoa
 CREATE TABLE IF NOT EXISTS people (
   ID 							UUID PRIMARY KEY,
-  first_name 			VARCHAR(100) NOT NULL,
-  last_name 			VARCHAR(100) NOT NULL,
-  email           VARCHAR(255) NOT NULL,
-  phone						VARCHAR(20) DEFAULT '',
-  cell_phone      VARCHAR(20) NOT NULL,
-  personable_id 	UUID NOT NULL,
-  personable_type VARCHAR(255) NOT NULL,
-  created_at      TIMESTAMP NOT NULL,
-	updated_at      TIMESTAMP NOT NULL
+  first_name 			varchar(100) not null,
+  last_name 			varchar(100) not null,
+  email           varchar(255) not null,
+  phone						varchar(20) DEFAULT '',
+  cell_phone      varchar(20) not null,
+  personable_id 	UUID not null,
+  personable_type varchar(255) not null,
+  created_at      timestamp not null,
+  updated_at      timestamp not null
 );
 
 -- Endereço
 CREATE TABLE IF NOT EXISTS addresses (
   ID 								UUID PRIMARY KEY,
-  public_place 			VARCHAR(255) DEFAULT '',
-  complement 				VARCHAR(255) DEFAULT '',
-  neighborhood 			VARCHAR(255) DEFAULT '',
-  city 							VARCHAR(255) DEFAULT '',
-  state 						VARCHAR(255) DEFAULT '',
-  zip_code 					VARCHAR(255) DEFAULT '',
+  public_place 			varchar(255) default '',
+  complement 				varchar(255) default '',
+  neighborhood 			varchar(255) default '',
+  city 							varchar(255) default '',
+  state 						varchar(255) default '',
+  zip_code 					varchar(255) default '',
   addressable_id 		UUID NOT NULL,
-  addressable_type 	VARCHAR(255) NOT NULL,
-  created_at       	TIMESTAMP NOT NULL,
-	updated_at       	TIMESTAMP NOT NULL
+  addressable_type 	varchar(255) not null,
+  created_at        timestamp not null,
+  updated_at        timestamp not null
+);
+
+-- Bucket s3
+CREATE TABLE IF NOT EXISTS buckets (
+	ID 										UUID PRIMARY KEY,
+	description 					varchar(100) NOT NULL,
+	name 									varchar(100) NOT NULL,
+	aws_access_key_id 		varchar(150) NOT NULL,
+	aws_secret_access_key varchar(100) NOT NULL,
+	aws_region 						varchar(50) NOT NULL,
+  created_at            timestamp not null,
+  updated_at            timestamp not null
 );

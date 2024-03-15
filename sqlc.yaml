@@ -3,8 +3,9 @@ version: "2"
 sql:
   - engine: "postgresql"
     schema: "api/schema.sql"
-    queries: 
+    queries:
       - "api/user.sql"
+      - "api/bucket.sql"
       - "api/owner.sql"
       - "api/person.sql"
       - "api/address.sql"

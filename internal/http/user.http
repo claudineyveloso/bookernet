@@ -14,7 +14,7 @@ Content-Type: application/json
 ### List users
 GET http://localhost:8080/get_users HTTP/1.1
 
-### Fetch users
+### Fetch user
 GET http://localhost:8080/get_user?id=703855ff-d928-4229-b3b6-463524c78f88
 
 ### Change is_active user
@@ -26,7 +26,7 @@ PUT http://localhost:8080/disable_user
 
 }
 
-### Cahage data user
+### Change data user
 PUT http://localhost:8080/date_user
 
 {
