@@ -31,7 +31,7 @@ func CreateUserController(rw http.ResponseWriter, r *http.Request, queries *db.Q
 		return
 	}
 
-	// Validar os campos do usuário antes de continuar
+	// Validate user fields before continuing
 	if err := createUserRequest.Validate(); err != nil {
 		http.Error(rw, "Erro de validação: "+err.Error(), http.StatusBadRequest)
 		return
@@ -78,10 +78,9 @@ func (u *UserRequest) Validate() error {
 				errorMap["password"] = "O campo de senha não pode estar vazio"
 			case "UserType":
 				errorMap["user_type"] = "O campo de tipo de usuário não pode estar vazio"
-				// Adicionar casos para outros campos, se necessário
 			}
 		}
-		// Construir mensagem de erro concatenando as mensagens de erro específicas
+		// Construct error message by concatenating specific error messages
 		var errorMsg string
 		for _, msg := range errorMap {
 			errorMsg += msg + "\n"
