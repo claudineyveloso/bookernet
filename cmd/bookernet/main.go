@@ -25,6 +25,9 @@ func main() {
 		}
 	}).Methods("GET")
 
+	// Endpoint Login
+	r.HandleFunc("/login", handler.LoginHandler).Methods("POST")
+
 	// Endpoint User
 	r.HandleFunc("/create_user", handler.CreateUserHandler).Methods("POST")
 	r.HandleFunc("/get_users", handler.GetUsersHandler).Methods("GET")
