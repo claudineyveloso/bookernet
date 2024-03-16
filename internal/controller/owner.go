@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/claudineyveloso/bookernet.git/internal/db"
-	"github.com/claudineyveloso/bookernet.git/internal/utils"
 	"github.com/google/uuid"
 )
 
@@ -16,10 +15,10 @@ type OwnerRequest struct {
 	PeopleType string         `json:"people_type"`
 	IsActive   bool           `json:"is_active"`
 	BucketID   uuid.UUID      `json:"bucket_id"`
-	CreatedAt  time.Time      `json:"created_at"`
-	UpdatedAt  time.Time      `json:"updated_at"`
 	Person     PersonRequest  `json:"person"`
 	Address    AddressRequest `json:"address"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
 }
 
 func CreateOwnerController(w http.ResponseWriter, r *http.Request, queries *db.Queries) {
@@ -42,34 +41,23 @@ func CreateOwnerController(w http.ResponseWriter, r *http.Request, queries *db.Q
 		UpdatedAt:  now,
 	}
 
-	createAddressParams := db.CreateAddressParams{
-		ID:              uuid.New(),
-		PublicPlace:     utils.CreateNullString(createOwnerRequest.Address.PublicPlace),
-		Complement:      utils.CreateNullString(createOwnerRequest.Address.Complement),
-		Neighborhood:    utils.CreateNullString(createOwnerRequest.Address.Neighborhood),
-		City:            utils.CreateNullString(createOwnerRequest.Address.City),
-		State:           utils.CreateNullString(createOwnerRequest.Address.State),
-		ZipCode:         utils.CreateNullString(createOwnerRequest.Address.ZipCode),
-		AddressableID:   createOwnerRequest.ID,
-		AddressableType: "owner",
-		CreatedAt:       now,
-		UpdatedAt:       now,
-	}
-
 	if err := queries.CreateOwner(r.Context(), createOwnerParams); err != nil {
 		http.Error(w, "Erro ao criar proprietário", http.StatusBadRequest)
 		return
 	}
-
+	// CreatePersonController creates a new person in the database based on the data provided in
+	// createPersonRequest.
 	_, err := CreatePersonController(w, r, queries, &createOwnerRequest)
 	if err != nil {
 		http.Error(w, "Erro ao criar a pessoa do proprietário", http.StatusBadRequest)
 		return
 	}
 
-	// Create address of owner
-	if err := queries.CreateAddress(r.Context(), createAddressParams); err != nil {
-		http.Error(w, "Erro ao criar o endereço do proprietário", http.StatusBadRequest)
+	// CreateAddressController creates a new address in the database based on the data
+	// fornecidos em createAddressRequest.
+	_, err = CreateAddressController(w, r, queries, &createOwnerRequest)
+	if err != nil {
+		http.Error(w, "Erro ao criar a pessoa do proprietário", http.StatusBadRequest)
 		return
 	}
 

@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -25,32 +23,27 @@ type AddressRequest struct {
 	UpdatedAt       time.Time `json:"updated_at"`
 }
 
-func CreateAddressController(w http.ResponseWriter, r *http.Request, queries *db.Queries, ownerID uuid.UUID) error {
-	var createAddressRequest AddressRequest
-	if err := json.NewDecoder(r.Body).Decode(&createAddressRequest); err != nil {
-		return fmt.Errorf("Erro ao decodificar corpo da solicitação: %v", err)
-	}
-
+func CreateAddressController(w http.ResponseWriter, r *http.Request, queries *db.Queries, createAddressRequest *OwnerRequest) (uuid.UUID, error) {
 	now := time.Now()
-	createAddressParams := CreateAddressParamsFromRequest(createAddressRequest, ownerID, now)
 
-	if err := queries.CreateAddress(r.Context(), createAddressParams); err != nil {
-		return fmt.Errorf("Erro ao criar o endereço: %v", err)
-	}
-	return nil
-}
-func CreateAddressParamsFromRequest(req AddressRequest, ownerID uuid.UUID, now time.Time) db.CreateAddressParams {
-	return db.CreateAddressParams{
+	createAddressParams := db.CreateAddressParams{
 		ID:              uuid.New(),
-		PublicPlace:     utils.CreateNullString(req.PublicPlace),
-		Complement:      utils.CreateNullString(req.Complement),
-		Neighborhood:    utils.CreateNullString(req.Neighborhood),
-		City:            utils.CreateNullString(req.City),
-		State:           utils.CreateNullString(req.State),
-		ZipCode:         utils.CreateNullString(req.ZipCode),
-		AddressableID:   ownerID,
+		PublicPlace:     utils.CreateNullString(createAddressRequest.Address.PublicPlace),
+		Complement:      utils.CreateNullString(createAddressRequest.Address.Complement),
+		Neighborhood:    utils.CreateNullString(createAddressRequest.Address.Neighborhood),
+		City:            utils.CreateNullString(createAddressRequest.Address.City),
+		State:           utils.CreateNullString(createAddressRequest.Address.State),
+		ZipCode:         utils.CreateNullString(createAddressRequest.Address.ZipCode),
+		AddressableID:   createAddressRequest.ID,
 		AddressableType: "owner",
 		CreatedAt:       now,
 		UpdatedAt:       now,
 	}
+
+	err := queries.CreateAddress(r.Context(), createAddressParams)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return createAddressParams.ID, nil
 }
