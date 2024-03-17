@@ -13,3 +13,11 @@ FROM buckets;
 
 -- name: UpdateBucket :exec
 UPDATE buckets SET description = $2, name = $3, aws_access_key_id = $4, aws_secret_access_key = $5, aws_region = $6, updated_at = $7 WHERE buckets.id = $1;
+
+-- name: DeleteBucket :exec
+DELETE FROM bucket
+WHERE id = $1
+AND NOT EXISTS (
+    SELECT 1 FROM owner WHERE bucket_id = $1
+);
+
