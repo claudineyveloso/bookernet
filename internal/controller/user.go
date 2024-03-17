@@ -64,7 +64,6 @@ func CreateUserController(rw http.ResponseWriter, r *http.Request, queries *db.Q
 		http.Error(rw, "Erro ao criar usuário", http.StatusInternalServerError)
 		return
 	}
-
 	// Encode user data in JSON format and send it as a response
 	if err := json.NewEncoder(rw).Encode(createUserParams); err != nil {
 		http.Error(rw, "Erro ao codificar resposta", http.StatusInternalServerError)

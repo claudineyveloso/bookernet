@@ -26,7 +26,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Erro ao decodificar JSON", http.StatusBadRequest)
 		return
 	}
-
 	// Busca o usuário pelo e-mail fornecido
 	user := controller.FindUserByEmail(loginData.Email)
 	if user == nil {
@@ -47,7 +46,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Erro ao gerar token", http.StatusInternalServerError)
 		return
 	}
-
 	// Retorna o token JWT para o usuário
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, `{"token": "%s"}`, token)

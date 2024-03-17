@@ -21,7 +21,7 @@ GET http://localhost:8080/get_bucket?id=703855ff-d928-4229-b3b6-463524c78f88
 
 
 
-### Change data user
+### Change data bucket
 PUT http://localhost:8080/update_bucket
 
 {

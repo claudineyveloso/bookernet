@@ -44,6 +44,18 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	controller.GetUsersController(w, r, dbConn)
 }
 
+func FetchUserHandler(w http.ResponseWriter, r *http.Request) {
+	conn, err := database.OpenConnection()
+	if err != nil {
+		http.Error(w, "Erro ao abrir a conexão com o banco de dados", http.StatusInternalServerError)
+		return
+	}
+	defer conn.Close()
+	dbConn := db.New(conn)
+	controller.GetUsersController(w, r, dbConn)
+
+}
+
 func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := database.OpenConnection()
 	if err != nil {

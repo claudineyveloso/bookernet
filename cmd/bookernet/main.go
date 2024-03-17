@@ -11,13 +11,12 @@ import (
 )
 
 func main() {
-
 	err := configs.Load()
 	if err != nil {
 		panic(err)
 	}
 	r := mux.NewRouter()
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/healthy", func(w http.ResponseWriter, r *http.Request) {
 		_, err := w.Write([]byte("Bem-vindo ao BookerNet!"))
 		if err != nil {
 			http.Error(w, "Erro ao escrever resposta", http.StatusInternalServerError)
