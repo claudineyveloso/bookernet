@@ -1,54 +1,40 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
-	"net/http"
 
-	"github.com/claudineyveloso/bookernet.git/configs"
-	"github.com/claudineyveloso/bookernet.git/internal/handler"
-	"github.com/gorilla/mux"
+	"github.com/claudineyveloso/bookernet.git/cmd/api"
+	"github.com/claudineyveloso/bookernet.git/cmd/db"
+	"github.com/claudineyveloso/bookernet.git/internal/configs"
 )
 
 func main() {
-	err := configs.Load()
-	if err != nil {
-		panic(err)
+	cfg := configs.Config{
+		PublicHost: configs.Envs.PublicHost,
+		Port:       configs.Envs.Port,
+		DBUser:     configs.Envs.DBUser,
+		DBPassword: configs.Envs.DBPassword,
+		DBName:     configs.Envs.DBName,
 	}
-	r := mux.NewRouter()
-	r.HandleFunc("/healthy", func(w http.ResponseWriter, r *http.Request) {
-		_, err := w.Write([]byte("Bem-vindo ao BookerNet!"))
-		if err != nil {
-			http.Error(w, "Erro ao escrever resposta", http.StatusInternalServerError)
-			return
-		}
-	}).Methods("GET")
-
-	// Endpoint Login
-	r.HandleFunc("/login", handler.LoginHandler).Methods("POST")
-
-	// Endpoint User
-	r.HandleFunc("/create_user", handler.CreateUserHandler).Methods("POST")
-	r.HandleFunc("/get_users", handler.GetUsersHandler).Methods("GET")
-	r.HandleFunc("/get_user", handler.GetUserHandler).Methods("GET")
-	r.HandleFunc("/disable_user", handler.DisableUserHandler).Methods("PUT")
-	r.HandleFunc("/update_user", handler.UpdateUserHandler).Methods("PUT")
-	r.HandleFunc("/update_password_user", handler.UpdatePasswordUserHandler).Methods("PUT")
-
-	// Endpoint Bucket
-	r.HandleFunc("/create_bucket", handler.CreateBucketHandler).Methods("POST")
-	r.HandleFunc("/get_buckets", handler.GetBucketsHandler).Methods("GET")
-	r.HandleFunc("/get_bucket", handler.GetBucketHandler).Methods("GET")
-	r.HandleFunc("/update_bucket", handler.UpdateBucketHandler).Methods("PUT")
-
-	// Endpoint Owner
-	r.HandleFunc("/create_owner", handler.CreateOwnerHandler).Methods("POST")
-
-	port := configs.GetServerPort()
-	fmt.Printf("Servidor escutando na porta %s\n", port)
-	err = http.ListenAndServe(fmt.Sprintf(":%s", port), r)
+	db, err := db.NewPostgresSQLStorage(cfg)
 	if err != nil {
-		log.Fatalf("Erro ao iniciar o servidor: %v", err)
+		log.Fatal(err)
 	}
 
+	initStorage(db)
+
+	server := api.NewAPIServer(fmt.Sprintf(":%s", configs.Envs.Port), db)
+	if err := server.Run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initStorage(db *sql.DB) {
+	err := db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("DB: Successfully connected!")
 }

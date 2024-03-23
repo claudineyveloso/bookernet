@@ -42,6 +42,19 @@ func (q *Queries) CreateBucket(ctx context.Context, arg CreateBucketParams) erro
 	return err
 }
 
+const deleteBucket = `-- name: DeleteBucket :exec
+DELETE FROM buckets
+WHERE buckets.id = $1
+AND NOT EXISTS (
+    SELECT 1 FROM owners WHERE bucket_id = $1
+)
+`
+
+func (q *Queries) DeleteBucket(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteBucket, id)
+	return err
+}
+
 const getBucket = `-- name: GetBucket :one
 SELECT id, description, name, aws_access_key_id, aws_secret_access_key, aws_region, created_at, updated_at
 FROM buckets

@@ -39,6 +39,9 @@ CREATE TABLE IF NOT EXISTS people (
   created_at      timestamp not null,
   updated_at      timestamp not null
 );
+create unique index first_name_idx on people (first_name);
+create unique index last_name_idx on people (last_name);
+create unique index email_people_idx on people (email);
 
 -- Endereço
 CREATE TABLE IF NOT EXISTS addresses (
@@ -66,3 +69,4 @@ CREATE TABLE IF NOT EXISTS buckets (
   created_at            timestamp not null,
   updated_at            timestamp not null
 );
+create unique index name_bucket_idx on buckets (name);

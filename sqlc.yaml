@@ -2,13 +2,13 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    schema: "api/schema.sql"
+    schema: "internal/scripts/schema.sql"
     queries:
-      - "api/user.sql"
-      - "api/bucket.sql"
-      - "api/owner.sql"
-      - "api/person.sql"
-      - "api/address.sql"
+      - "internal/scripts/user.sql"
+      - "internal/scripts/bucket.sql"
+      - "internal/scripts/owner.sql"
+      - "internal/scripts/person.sql"
+      - "internal/scripts/address.sql"
     gen:
       go:
         package: "db"
