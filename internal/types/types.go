@@ -16,6 +16,17 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type CreateUserPayload struct {
+	ID        uuid.UUID `json:"id"`
+	Email     string    `json:"email" validate:"required"`
+	Password  string    `json:"password" validate:"required"`
+	IsActive  bool      `json:"is_active"`
+	UserType  string    `json:"user_type" validate:"required"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type UserStore interface {
 	GetUsers() ([]*User, error)
+	CreateUser(CreateUserPayload) error
 }

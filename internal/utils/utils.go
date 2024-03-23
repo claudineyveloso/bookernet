@@ -5,7 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
+
+var Validate = validator.New()
 
 // Helper function to handle HTTP errors
 func HandleHTTPError(w http.ResponseWriter, statusCode int, message string) {
