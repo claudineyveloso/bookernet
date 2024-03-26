@@ -54,6 +54,17 @@ type Owner struct {
 	Address    `json:"address"`
 }
 
+type Bucket struct {
+	ID                 uuid.UUID `json:"id"`
+	Description        string    `json:"description"`
+	Name               string    `json:"name"`
+	AwsAccessKeyID     string    `json:"aws_access_key_id"`
+	AwsSecretAccessKey string    `json:"aws_secret_access_key"`
+	AwsRegion          string    `json:"aws_region"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -101,6 +112,16 @@ type CreateOwnerPayload struct {
 	Person     `json:"person"`
 	Address    `json:"address"`
 }
+type CreateBucketPayload struct {
+	ID                 uuid.UUID `json:"id"`
+	Description        string    `json:"description" validate:"required"`
+	Name               string    `json:"name" validate:"required"`
+	AwsAccessKeyID     string    `json:"aws_access_key_id" validate:"required"`
+	AwsSecretAccessKey string    `json:"aws_secret_access_key" validate:"required"`
+	AwsRegion          string    `json:"aws_region" validate:"required"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
 
 type PasswordUserPayload struct {
 	Password  string    `json:"password" validate:"required"`
@@ -132,4 +153,8 @@ type PersonStore interface {
 
 type OwnerStore interface {
 	CreateOwner(CreateOwnerPayload) error
+}
+
+type BucketStore interface {
+	CreateBucket(CreateBucketPayload) error
 }

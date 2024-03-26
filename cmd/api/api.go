@@ -29,5 +29,9 @@ func (s *APIServer) Run() error {
 	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(r)
 
+	bucketStore := user.NewStore(s.db)
+	bucketHandler := user.NewHandler(bucketStore)
+	bucketHandler.RegisterRoutes(r)
+
 	return http.ListenAndServe("localhost:8080", r)
 }
