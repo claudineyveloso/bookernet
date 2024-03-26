@@ -157,4 +157,6 @@ type OwnerStore interface {
 
 type BucketStore interface {
 	CreateBucket(CreateBucketPayload) error
+	GetBuckets() ([]*Bucket, error)
+	GetBucketByID(id uuid.UUID) (*Bucket, error)
 }

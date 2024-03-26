@@ -47,35 +47,35 @@ func (s *Store) CreateBucket(bucket types.CreateBucketPayload) error {
 	return nil
 }
 
-// func (s *Store) GetUsers() ([]*types.User, error) {
-// 	queries := db.New(s.db)
-// 	ctx := context.Background()
+func (s *Store) GetBuckets() ([]*types.Bucket, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
 
-// 	dbUsers, err := queries.GetUsers(ctx)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	dbBuckets, err := queries.GetBuckets(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-// 	var users []*types.User
-// 	for _, dbUser := range dbUsers {
-// 		user := convertDBUserToUser(dbUser)
-// 		users = append(users, user)
-// 	}
-// 	return users, nil
-// }
+	var buckets []*types.Bucket
+	for _, dbBucket := range dbBuckets {
+		bucket := convertDBUserToUser(dbBucket)
+		buckets = append(buckets, bucket)
+	}
+	return buckets, nil
+}
 
-// func (s *Store) GetUserByID(userID uuid.UUID) (*types.User, error) {
-// 	queries := db.New(s.db)
-// 	ctx := context.Background()
-// 	dbUser, err := queries.GetUser(ctx, userID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	user := convertDBUserToUser(dbUser)
+func (s *Store) GetBucketsByID(bucketID uuid.UUID) (*types.Bucket, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
+	dbBucket, err := queries.GetBucket(ctx, bucketID)
+	if err != nil {
+		return nil, err
+	}
+	user := convertDBUserToUser(dbBucket)
 
-// 	return user, nil
+	return user, nil
 
-// }
+}
 
 func scanRowsIntoUser(rows *sql.Rows) (*types.Bucket, error) {
 	bucket := new(types.Bucket)
