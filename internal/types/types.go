@@ -30,7 +30,7 @@ type Address struct {
 	UpdatedAt       time.Time `json:"updated_at"`
 }
 
-type People struct {
+type Person struct {
 	ID             uuid.UUID `json:"id"`
 	FirstName      string    `json:"first_name"`
 	LastName       string    `json:"last_name"`
@@ -67,7 +67,7 @@ type CreateAddressPayload struct {
 	UpdatedAt       time.Time `json:"updated_at"`
 }
 
-type CreatePeoplePayload struct {
+type CreatePersonPayload struct {
 	ID             uuid.UUID `json:"id"`
 	FirstName      string    `json:"first_name" validate:"required"`
 	LastName       string    `json:"last_name" validate:"required"`
@@ -104,6 +104,6 @@ type AddressStore interface {
 	CreateAddress(CreateAddressPayload) error
 }
 
-type PeopleStore interface {
-	CreatePeople(CreatePeoplePayload) error
+type PersonStore interface {
+	CreatePerson(CreatePersonPayload) error
 }
