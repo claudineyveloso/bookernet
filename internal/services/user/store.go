@@ -45,10 +45,10 @@ func (s *Store) CreateUser(user types.CreateUserPayload) error {
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
-	//ctx := context.Background()
 
 	if err := queries.CreateUser(ctx, createUserParams); err != nil {
 		//http.Error(_, "Erro ao criar usuário", http.StatusInternalServerError)
+		fmt.Println("Erro ao criar usuário:", err)
 		return err
 	}
 	return nil
@@ -69,6 +69,19 @@ func (s *Store) GetUsers() ([]*types.User, error) {
 		users = append(users, user)
 	}
 	return users, nil
+}
+
+func (s *Store) GetUserByID(userID uuid.UUID) (*types.User, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
+	dbUser, err := queries.GetUser(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	user := convertDBUserToUser(dbUser)
+
+	return user, nil
+
 }
 
 func scanRowsIntoUser(rows *sql.Rows) (*types.User, error) {
