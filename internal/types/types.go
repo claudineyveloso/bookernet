@@ -43,6 +43,17 @@ type Person struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
+type Bucket struct {
+	ID                 uuid.UUID `json:"id"`
+	Description        string    `json:"description"`
+	Name               string    `json:"name"`
+	AwsAccessKeyID     string    `json:"aws_access_key_id"`
+	AwsSecretAccessKey string    `json:"aws_secret_access_key"`
+	AwsRegion          string    `json:"aws_region"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -80,6 +91,17 @@ type CreatePersonPayload struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
+type CreateBucketPayload struct {
+	ID                 uuid.UUID `json:"id"`
+	Description        string    `json:"description" validate:"required"`
+	Name               string    `json:"name" validate:"required"`
+	AwsAccessKeyID     string    `json:"aws_access_key_id" validate:"required"`
+	AwsSecretAccessKey string    `json:"aws_secret_access_key" validate:"required"`
+	AwsRegion          string    `json:"aws_region" validate:"required"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
+
 type PasswordUserPayload struct {
 	Password  string    `json:"password" validate:"required"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -106,4 +128,8 @@ type AddressStore interface {
 
 type PersonStore interface {
 	CreatePerson(CreatePersonPayload) error
+}
+
+type BucketStore interface {
+	CreateBucket(CreateBucketPayload) error
 }
