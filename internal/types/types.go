@@ -43,6 +43,17 @@ type Person struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
+type Owner struct {
+	ID         uuid.UUID `json:"id"`
+	PeopleType string    `json:"people_type"`
+	IsActive   bool      `json:"is_active"`
+	BucketID   uuid.UUID `json:"bucket_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
+	Person     `json:"person"`
+	Address    `json:"address"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -80,6 +91,17 @@ type CreatePersonPayload struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
+type CreateOwnerPayload struct {
+	ID         uuid.UUID `json:"id"`
+	PeopleType string    `json:"people_type" validate:"required"`
+	IsActive   bool      `json:"is_active"`
+	BucketID   uuid.UUID `json:"bucket_id" validate:"required"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
+	Person     `json:"person"`
+	Address    `json:"address"`
+}
+
 type PasswordUserPayload struct {
 	Password  string    `json:"password" validate:"required"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -106,4 +128,8 @@ type AddressStore interface {
 
 type PersonStore interface {
 	CreatePerson(CreatePersonPayload) error
+}
+
+type OwnerStore interface {
+	CreateOwner(CreateOwnerPayload) error
 }
