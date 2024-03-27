@@ -64,7 +64,7 @@ func (s *Store) GetBuckets() ([]*types.Bucket, error) {
 	return buckets, nil
 }
 
-func (s *Store) GetBucketsByID(bucketID uuid.UUID) (*types.Bucket, error) {
+func (s *Store) GetBucketByID(bucketID uuid.UUID) (*types.Bucket, error) {
 	queries := db.New(s.db)
 	ctx := context.Background()
 	dbBucket, err := queries.GetBucket(ctx, bucketID)
