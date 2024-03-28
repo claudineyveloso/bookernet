@@ -25,6 +25,19 @@ type Address struct {
 	UpdatedAt       time.Time      `json:"updated_at"`
 }
 
+type Attendance struct {
+	ID            uuid.UUID `json:"id"`
+	DateService   time.Time `json:"date_service"`
+	StartService  time.Time `json:"start_service"`
+	EndService    time.Time `json:"end_service"`
+	Status        string    `json:"status"`
+	Reminder      int32     `json:"reminder"`
+	OwnerID       uuid.UUID `json:"owner_id"`
+	TypeServiceID uuid.UUID `json:"type_service_id"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+}
+
 type Bucket struct {
 	ID                 uuid.UUID `json:"id"`
 	Description        string    `json:"description"`
@@ -36,6 +49,50 @@ type Bucket struct {
 	UpdatedAt          time.Time `json:"updated_at"`
 }
 
+type CallTerminal struct {
+	ID            uuid.UUID `json:"id"`
+	CallType      string    `json:"call_type"`
+	Origin        string    `json:"origin"`
+	Destination   string    `json:"destination"`
+	NameFile      string    `json:"name_file"`
+	CallFlow      string    `json:"call_flow"`
+	CallStatus    string    `json:"call_status"`
+	Size          int32     `json:"size"`
+	Duration      string    `json:"duration"`
+	FileName      string    `json:"file_name"`
+	Etag          string    `json:"etag"`
+	InputDate     time.Time `json:"input_date"`
+	BeginningCall time.Time `json:"beginning_call"`
+	ClosingCall   time.Time `json:"closing_call"`
+	OwnerID       uuid.UUID `json:"owner_id"`
+	BucketID      uuid.UUID `json:"bucket_id"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+}
+
+type Customer struct {
+	ID        uuid.UUID    `json:"id"`
+	Birthday  sql.NullTime `json:"birthday"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt time.Time    `json:"updated_at"`
+}
+
+type Insurance struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	Period    string    `json:"period"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Interval struct {
+	ID              uuid.UUID `json:"id"`
+	OwnerID         uuid.UUID `json:"owner_id"`
+	IntervalMinutes int32     `json:"interval_minutes"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+}
+
 type Owner struct {
 	ID         uuid.UUID `json:"id"`
 	PeopleType string    `json:"people_type"`
@@ -43,6 +100,13 @@ type Owner struct {
 	BucketID   uuid.UUID `json:"bucket_id"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
+}
+
+type OwnersUser struct {
+	OwnerID   uuid.UUID `json:"owner_id"`
+	UserID    uuid.UUID `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type Person struct {
@@ -56,6 +120,31 @@ type Person struct {
 	PersonableType string         `json:"personable_type"`
 	CreatedAt      time.Time      `json:"created_at"`
 	UpdatedAt      time.Time      `json:"updated_at"`
+}
+
+type Role struct {
+	ID        uuid.UUID      `json:"id"`
+	Name      sql.NullString `json:"name"`
+	Model     sql.NullString `json:"model"`
+	Action    sql.NullString `json:"action"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+}
+
+type RolesUser struct {
+	ID        uuid.UUID `json:"id"`
+	RoleID    uuid.UUID `json:"role_id"`
+	UserID    uuid.UUID `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type TypeService struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	Duration  time.Time `json:"duration"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type User struct {
