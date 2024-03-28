@@ -56,3 +56,12 @@ func GetTokenFromRequest(r *http.Request) string {
 
 	return ""
 }
+
+func Uint32ToUUIDBytes(id uint32) []byte {
+	bytes := make([]byte, 16)
+	bytes[12] = byte(id >> 24)
+	bytes[13] = byte(id >> 16)
+	bytes[14] = byte(id >> 8)
+	bytes[15] = byte(id)
+	return bytes
+}

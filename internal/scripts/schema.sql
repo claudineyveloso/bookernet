@@ -24,7 +24,7 @@ CREATE TABLE owners (
 ALTER TABLE
    "owners"
 ADD
-   FOREIGN KEY ("bucket_id") REFERENCES "owners" ("id");
+   FOREIGN KEY ("bucket_id") REFERENCES "buckets" ("id");
 
 -- Pessoa
 CREATE TABLE IF NOT EXISTS people (

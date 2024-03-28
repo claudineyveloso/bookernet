@@ -152,7 +152,7 @@ type PersonStore interface {
 }
 
 type OwnerStore interface {
-	CreateOwner(CreateOwnerPayload) error
+	CreateOwner(CreateOwnerPayload) (uuid.UUID, error)
 }
 
 type BucketStore interface {

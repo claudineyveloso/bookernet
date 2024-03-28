@@ -70,10 +70,10 @@ func (h *Handler) handleGetBucket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.bucketStore.GetBucketByID(parsedBucketsID)
+	bucket, err := h.bucketStore.GetBucketByID(parsedBucketsID)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
-	utils.WriteJSON(w, http.StatusOK, user)
+	utils.WriteJSON(w, http.StatusOK, bucket)
 }

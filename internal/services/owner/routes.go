@@ -11,11 +11,13 @@ import (
 )
 
 type Handler struct {
-	ownerStore types.OwnerStore
+	ownerStore   types.OwnerStore
+	personStore  types.PersonStore
+	addressStore types.AddressStore
 }
 
-func NewHandler(ownerStore types.OwnerStore) *Handler {
-	return &Handler{ownerStore: ownerStore}
+func NewHandler(ownerStore types.OwnerStore, personStore types.PersonStore, addressStore types.AddressStore) *Handler {
+	return &Handler{ownerStore: ownerStore, personStore: personStore, addressStore: addressStore}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
@@ -33,8 +35,39 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
 		return
 	}
-	err := h.ownerStore.CreateOwner(owner)
+	createdOwner, err := h.ownerStore.CreateOwner(owner)
 	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	person := types.CreatePersonPayload{
+		FirstName:      owner.Person.FirstName,
+		LastName:       owner.Person.LastName,
+		Email:          owner.Person.Email,
+		Phone:          owner.Person.Phone,
+		CellPhone:      owner.Person.CellPhone,
+		PersonableID:   createdOwner,
+		PersonableType: "owner",
+	}
+
+	if err := h.personStore.CreatePerson(person); err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	address := types.CreateAddressPayload{
+		PublicPlace:     owner.Address.PublicPlace,
+		Complement:      owner.Address.Complement,
+		Neighborhood:    owner.Address.Neighborhood,
+		City:            owner.Address.City,
+		State:           owner.Address.State,
+		ZipCode:         owner.Address.ZipCode,
+		AddressableID:   createdOwner,
+		AddressableType: "owner",
+	}
+
+	if err := h.addressStore.CreateAddress(address); err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}

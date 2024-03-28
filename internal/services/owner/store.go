@@ -1,6 +1,7 @@
 package owner
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"time"
@@ -18,9 +19,9 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateOwner(owner types.CreateOwnerPayload) error {
-	//queries := db.New(s.db)
-	//ctx := context.Background()
+func (s *Store) CreateOwner(owner types.CreateOwnerPayload) (uuid.UUID, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
 
 	owner.ID = uuid.New()
 	now := time.Now()
@@ -36,10 +37,10 @@ func (s *Store) CreateOwner(owner types.CreateOwnerPayload) error {
 		UpdatedAt:  owner.UpdatedAt,
 	}
 	fmt.Println(createOwnerParams)
-	// if err := queries.CreateOwner(ctx, createOwnerParams); err != nil {
-	// 	fmt.Println("Erro ao criar o endereço:", err)
-	// 	return err
-	// }
+	if err := queries.CreateOwner(ctx, createOwnerParams); err != nil {
+		fmt.Println("Erro ao criar o endereço:", err)
+		return uuid.UUID{}, err
+	}
 
-	return nil
+	return owner.ID, nil
 }
