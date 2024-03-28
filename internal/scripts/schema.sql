@@ -70,3 +70,150 @@ CREATE TABLE IF NOT EXISTS buckets (
   updated_at            timestamp not null
 );
 create unique index name_bucket_idx on buckets (name);
+
+-- Usuário do proprietário
+CREATE TABLE IF NOT EXISTS owners_users (
+	owner_id 											UUID NOT NULL,
+	user_id 											UUID NOT NULL,
+	created_at  									TIMESTAMP NOT NULL,
+	updated_at 		 								TIMESTAMP NOT NULL
+);
+
+ALTER TABLE
+   "owners_users"
+ADD
+	FOREIGN KEY (owner_id) REFERENCES owners(id);
+
+ALTER TABLE
+   "owners_users"
+ADD
+	FOREIGN KEY (user_id) REFERENCES users(id);
+
+-- Cliente
+CREATE TABLE IF NOT EXISTS customers (
+  ID UUID PRIMARY KEY,
+  birthday TIMESTAMP,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS cpf_cnpj_idx ON customers (cpf_cnpj);
+
+-- Chamadas atendidas
+CREATE TABLE IF NOT EXISTS call_terminals (
+	ID 							UUID PRIMARY KEY,
+	call_type 			VARCHAR(30) NOT NULL,
+	origin 					VARCHAR(50) NOT NULL,
+	destination 		VARCHAR(50) NOT NULL,
+	name_file 			VARCHAR(255) NOT NULL,
+	call_flow 			VARCHAR(1) NOT NULL,
+	call_status 		VARCHAR(10) NOT NULL,
+	size 						INTEGER NOT NULL,
+	duration 				VARCHAR(255) NOT NULL,
+	file_name 			VARCHAR(255) NOT NULL,
+	etag 						VARCHAR(50) NOT NULL,
+	input_date 			TIMESTAMP NOT NULL,
+	beginning_call 	TIMESTAMP NOT NULL,
+	closing_call 		TIMESTAMP NOT NULL,
+	owner_id 				UUID NOT NULL,
+	bucket_id 			UUID NOT NULL,
+	created_at  		TIMESTAMP NOT NULL,
+	updated_at 		 	TIMESTAMP NOT NULL
+);
+
+ALTER TABLE
+   "call_terminals"
+ADD
+	FOREIGN KEY (owner_id) REFERENCES owners(id);
+
+ALTER TABLE
+   "call_terminals"
+ADD
+	FOREIGN KEY (bucket_id) REFERENCES buckets(id);
+
+-- Intervalo de atendimento
+CREATE TABLE IF NOT EXISTS intervals (
+	ID 								UUID PRIMARY KEY,
+	owner_id 					UUID NOT NULL,
+	interval_minutes 	INTEGER NOT NULL,
+	created_at  			TIMESTAMP NOT NULL,
+	updated_at 		 		TIMESTAMP NOT NULL
+);
+
+ALTER TABLE
+   "intervals"
+ADD
+  FOREIGN KEY (owner_id) REFERENCES owners(id);
+
+-- Tipo de serviço
+CREATE TABLE IF NOT EXISTS type_services (
+	ID 					UUID PRIMARY KEY,
+	name				VARCHAR(100) NOT NULL,
+	duration		TIME NOT NULL,
+	created_at  TIMESTAMP NOT NULL,
+	updated_at 	TIMESTAMP NOT NULL
+);
+CREATE UNIQUE INDEX type_service_name_idx ON type_services (name);
+
+-- Atendimento/Agenda
+-- Status - Aberta - Efetivada - Cancelada - Finalizada
+
+CREATE TABLE IF NOT EXISTS attendances (
+	ID 							UUID PRIMARY KEY,
+	date_service		TIMESTAMP NOT NULL,
+	start_service		TIME NOT NULL,
+	end_service			TIME NOT NULL,
+	status					VARCHAR(1) NOT NULL,
+	reminder				INTEGER NOT NULL,
+	owner_id 				UUID NOT NULL,
+	type_service_id   UUID NOT NULL,
+	created_at  		TIMESTAMP NOT NULL,
+	updated_at 		 	TIMESTAMP NOT NULL
+);
+ALTER TABLE
+   "attendances"
+ADD
+  FOREIGN KEY (owner_id) REFERENCES owners(id);
+
+ALTER TABLE
+   "attendances"
+ADD
+  FOREIGN KEY (type_service_id) REFERENCES type_services(id);
+
+-- Plano de saúde
+-- Diurno - Vespertino - Integral
+CREATE TABLE IF NOT EXISTS insurances (
+	ID 					UUID PRIMARY KEY,
+	name				VARCHAR(100) NOT NULL,
+	period			VARCHAR(1) NOT NULL,
+	created_at  TIMESTAMP NOT NULL,
+	updated_at 	TIMESTAMP NOT NULL
+);
+CREATE UNIQUE INDEX insurances_name_idx ON insurances (name);
+
+-- Regras
+CREATE TABLE IF NOT EXISTS roles (
+  ID 					UUID PRIMARY KEY,
+  name 				VARCHAR(100),
+  model 			VARCHAR(100),
+  action 			VARCHAR(100),
+  created_at  TIMESTAMP NOT NULL,
+	updated_at  TIMESTAMP NOT NULL
+);
+
+-- Regras por usuário
+CREATE TABLE IF NOT EXISTS roles_users (
+ 	ID          UUID PRIMARY KEY,
+ 	role_id     UUID NOT NULL,
+ 	user_id     UUID NOT NULL,
+  created_at  TIMESTAMP NOT NULL,
+	updated_at  TIMESTAMP NOT NULL
+);
+ALTER TABLE
+   "roles_users"
+ADD
+	FOREIGN KEY (role_id) REFERENCES roles(id);
+
+ALTER TABLE
+   "roles_users"
+ADD
+	FOREIGN KEY (user_id) REFERENCES users(id);
