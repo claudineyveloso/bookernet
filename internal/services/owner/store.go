@@ -36,7 +36,6 @@ func (s *Store) CreateOwner(owner types.CreateOwnerPayload) (uuid.UUID, error) {
 		CreatedAt:  owner.CreatedAt,
 		UpdatedAt:  owner.UpdatedAt,
 	}
-	fmt.Println(createOwnerParams)
 	if err := queries.CreateOwner(ctx, createOwnerParams); err != nil {
 		fmt.Println("Erro ao criar o endereço:", err)
 		return uuid.UUID{}, err

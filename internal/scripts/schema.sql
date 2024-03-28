@@ -73,10 +73,10 @@ create unique index name_bucket_idx on buckets (name);
 
 -- Usuário do proprietário
 CREATE TABLE IF NOT EXISTS owners_users (
-	owner_id 											UUID NOT NULL,
-	user_id 											UUID NOT NULL,
-	created_at  									TIMESTAMP NOT NULL,
-	updated_at 		 								TIMESTAMP NOT NULL
+	owner_id   UUID NOT NULL,
+	user_id 	 UUID NOT NULL,
+	created_at TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP NOT NULL
 );
 
 ALTER TABLE
@@ -92,11 +92,10 @@ ADD
 -- Cliente
 CREATE TABLE IF NOT EXISTS customers (
   ID UUID PRIMARY KEY,
-  birthday TIMESTAMP,
+  birthday DATE,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS cpf_cnpj_idx ON customers (cpf_cnpj);
 
 -- Chamadas atendidas
 CREATE TABLE IF NOT EXISTS call_terminals (

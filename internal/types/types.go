@@ -65,6 +65,15 @@ type Bucket struct {
 	UpdatedAt          time.Time `json:"updated_at"`
 }
 
+type Customer struct {
+	ID        uuid.UUID `json:"id"`
+	Birthday  time.Time `json:"birthday"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Person    `json:"person"`
+	Address   `json:"address"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -123,6 +132,15 @@ type CreateBucketPayload struct {
 	UpdatedAt          time.Time `json:"updated_at"`
 }
 
+type CreateCustomerPayload struct {
+	ID        uuid.UUID `json:"id"`
+	Birthday  time.Time `json:"birthday"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Person    `json:"person"`
+	Address   `json:"address"`
+}
+
 type PasswordUserPayload struct {
 	Password  string    `json:"password" validate:"required"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -159,4 +177,8 @@ type BucketStore interface {
 	CreateBucket(CreateBucketPayload) error
 	GetBuckets() ([]*Bucket, error)
 	GetBucketByID(id uuid.UUID) (*Bucket, error)
+}
+
+type CustomerStore interface {
+	CreateCustomer(CreateCustomerPayload) (uuid.UUID, error)
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/claudineyveloso/bookernet.git/internal/services/address"
 	"github.com/claudineyveloso/bookernet.git/internal/services/bucket"
+	"github.com/claudineyveloso/bookernet.git/internal/services/customer"
 	"github.com/claudineyveloso/bookernet.git/internal/services/healthy"
 	"github.com/claudineyveloso/bookernet.git/internal/services/owner"
 	"github.com/claudineyveloso/bookernet.git/internal/services/person"
@@ -42,6 +43,12 @@ func (s *APIServer) Run() error {
 	addressStore := address.NewStore(s.db)
 	ownerHandler := owner.NewHandler(ownerStore, personStore, addressStore)
 	ownerHandler.RegisterRoutes(r)
+
+	customerStore := customer.NewStore(s.db)
+	customerStore := person.NewStore(s.db)
+	addressStore := address.NewStore(s.db)
+	customerHandler := owner.NewHandler(customerStore, personStore, addressStore)
+	customerHandler.RegisterRoutes(r)
 
 	return http.ListenAndServe("localhost:8080", r)
 }

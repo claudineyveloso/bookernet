@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -22,6 +23,16 @@ func CreateNullString(value string) sql.NullString {
 		return sql.NullString{String: value, Valid: true}
 	}
 	return sql.NullString{Valid: false}
+}
+
+func CreateNullDate(value time.Time) sql.NullTime {
+	// Check that the time is not equal to zero (zero time is the default value for time.Time)
+	if !value.IsZero() {
+		// If time is not zero, return a valid NullTime with the defined time
+		return sql.NullTime{Time: value, Valid: true}
+	}
+	// If the time is zero, returns an invalid NullTime
+	return sql.NullTime{Valid: false}
 }
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
