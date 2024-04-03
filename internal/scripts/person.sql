@@ -4,3 +4,12 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
 
 -- name: UpdatePerson :exec
 UPDATE people SET first_name = $2, last_name = $3, updated_at = $4 WHERE id = $1;
+
+-- name: GetPerson :one
+SELECT *
+FROM people
+WHERE people.personable_id = $1;
+
+-- name: DeletePerson :exec
+DELETE FROM people
+WHERE people.personable_id = $1;

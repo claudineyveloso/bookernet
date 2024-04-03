@@ -49,6 +49,41 @@ func (q *Queries) CreateAddress(ctx context.Context, arg CreateAddressParams) er
 	return err
 }
 
+const deleteAddress = `-- name: DeleteAddress :exec
+DELETE FROM addresses
+WHERE addresses.addressable_id = $1
+`
+
+func (q *Queries) DeleteAddress(ctx context.Context, addressableID uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteAddress, addressableID)
+	return err
+}
+
+const getAddress = `-- name: GetAddress :one
+SELECT id, public_place, complement, neighborhood, city, state, zip_code, addressable_id, addressable_type, created_at, updated_at
+FROM addresses
+WHERE addresses.addressable_id = $1
+`
+
+func (q *Queries) GetAddress(ctx context.Context, addressableID uuid.UUID) (Address, error) {
+	row := q.db.QueryRowContext(ctx, getAddress, addressableID)
+	var i Address
+	err := row.Scan(
+		&i.ID,
+		&i.PublicPlace,
+		&i.Complement,
+		&i.Neighborhood,
+		&i.City,
+		&i.State,
+		&i.ZipCode,
+		&i.AddressableID,
+		&i.AddressableType,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updateAddress = `-- name: UpdateAddress :exec
 UPDATE addresses SET public_place = $2, complement = $3, neighborhood = $4, city = $5, state = $6, zip_code = $7, updated_at = $8 WHERE id = $1
 `

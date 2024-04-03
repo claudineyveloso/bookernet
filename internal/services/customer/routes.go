@@ -16,12 +16,13 @@ type Handler struct {
 	addressStore  types.AddressStore
 }
 
-func NewHandler(customerStore types.CustomerStore, personStore types.PersonStore, addressStore types.AddressStore) *Handler {
-	return &Handler{customerStore: customerStore, personStore: personStore, addressStore: addressStore}
+func NewHandler(customerStore types.CustomerStore) *Handler {
+	return &Handler{customerStore: customerStore}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/create_customer", h.handleCreateCustomer).Methods(http.MethodPost)
+	router.HandleFunc("/get_customers", h.handleGetCustomers).Methods(http.MethodGet)
 }
 
 func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
@@ -74,4 +75,13 @@ func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusCreated, customer)
 
+}
+
+func (h *Handler) handleGetCustomers(w http.ResponseWriter, r *http.Request) {
+	users, err := h.customerStore.GetCustomers()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Erro ao obter usuários: %v", err), http.StatusInternalServerError)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, users)
 }

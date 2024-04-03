@@ -45,9 +45,9 @@ func (s *APIServer) Run() error {
 	ownerHandler.RegisterRoutes(r)
 
 	customerStore := customer.NewStore(s.db)
-	customerStore := person.NewStore(s.db)
-	addressStore := address.NewStore(s.db)
-	customerHandler := owner.NewHandler(customerStore, personStore, addressStore)
+	personStore = person.NewStore(s.db)
+	addressStore = address.NewStore(s.db)
+	customerHandler := customer.NewHandler(customerStore)
 	customerHandler.RegisterRoutes(r)
 
 	return http.ListenAndServe("localhost:8080", r)

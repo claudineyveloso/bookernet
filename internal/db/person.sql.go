@@ -47,6 +47,40 @@ func (q *Queries) CreatePerson(ctx context.Context, arg CreatePersonParams) erro
 	return err
 }
 
+const deletePerson = `-- name: DeletePerson :exec
+DELETE FROM people
+WHERE people.personable_id = $1
+`
+
+func (q *Queries) DeletePerson(ctx context.Context, personableID uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deletePerson, personableID)
+	return err
+}
+
+const getPerson = `-- name: GetPerson :one
+SELECT id, first_name, last_name, email, phone, cell_phone, personable_id, personable_type, created_at, updated_at
+FROM people
+WHERE people.personable_id = $1
+`
+
+func (q *Queries) GetPerson(ctx context.Context, personableID uuid.UUID) (Person, error) {
+	row := q.db.QueryRowContext(ctx, getPerson, personableID)
+	var i Person
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Phone,
+		&i.CellPhone,
+		&i.PersonableID,
+		&i.PersonableType,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updatePerson = `-- name: UpdatePerson :exec
 UPDATE people SET first_name = $2, last_name = $3, updated_at = $4 WHERE id = $1
 `
