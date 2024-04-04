@@ -7,6 +7,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/types"
 	"github.com/claudineyveloso/bookernet.git/internal/utils"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -23,6 +24,7 @@ func NewHandler(customerStore types.CustomerStore) *Handler {
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/create_customer", h.handleCreateCustomer).Methods(http.MethodPost)
 	router.HandleFunc("/get_customers", h.handleGetCustomers).Methods(http.MethodGet)
+	router.HandleFunc("/get_customer/{id}", h.handleGetCustomer).Methods(http.MethodGet)
 }
 
 func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
@@ -84,4 +86,25 @@ func (h *Handler) handleGetCustomers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	utils.WriteJSON(w, http.StatusOK, customers)
+}
+
+func (h *Handler) handleGetCustomer(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	str, ok := vars["id"]
+	if !ok {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing product ID"))
+		return
+	}
+	parsedID, err := uuid.Parse(str)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid product ID"))
+		return
+	}
+
+	user, err := h.customerStore.GetCustomer(parsedID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, user)
 }

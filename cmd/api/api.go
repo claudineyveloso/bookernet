@@ -37,14 +37,10 @@ func (s *APIServer) Run() error {
 	bucketHandler.RegisterRoutes(r)
 
 	ownerStore := owner.NewStore(s.db)
-	//personStore := person.NewStore(s.db)
-	//addressStore := address.NewStore(s.db)
 	ownerHandler := owner.NewHandler(ownerStore)
 	ownerHandler.RegisterRoutes(r)
 
 	customerStore := customer.NewStore(s.db)
-	//personStore = person.NewStore(s.db)
-	//addressStore = address.NewStore(s.db)
 	customerHandler := customer.NewHandler(customerStore)
 	customerHandler.RegisterRoutes(r)
 

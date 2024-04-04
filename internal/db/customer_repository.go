@@ -1,6 +1,10 @@
 package db
 
-import "context"
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
 
 // Defina uma nova struct para representar os dados completos do cliente
 type FullCustomerRow struct {
@@ -54,4 +58,38 @@ func (q *Queries) GetCustomersWithDetails(ctx context.Context) ([]FullCustomerRo
 		return nil, err
 	}
 	return customers, nil
+}
+func (q *Queries) GetCustomerWithDetails(ctx context.Context, id uuid.UUID) (FullCustomerRow, error) {
+	var customer FullCustomerRow
+	err := q.db.QueryRowContext(ctx, getCustomer, id).Scan(
+		&customer.Customer.ID,
+		&customer.Customer.Birthday,
+		&customer.Customer.CreatedAt,
+		&customer.Customer.UpdatedAt,
+		&customer.Person.ID,
+		&customer.Person.FirstName,
+		&customer.Person.LastName,
+		&customer.Person.Email,
+		&customer.Person.Phone,
+		&customer.Person.CellPhone,
+		&customer.Person.PersonableID,
+		&customer.Person.PersonableType,
+		&customer.Person.CreatedAt,
+		&customer.Person.UpdatedAt,
+		&customer.Address.ID,
+		&customer.Address.PublicPlace,
+		&customer.Address.Complement,
+		&customer.Address.Neighborhood,
+		&customer.Address.City,
+		&customer.Address.State,
+		&customer.Address.ZipCode,
+		&customer.Address.AddressableID,
+		&customer.Address.AddressableType,
+		&customer.Address.CreatedAt,
+		&customer.Address.UpdatedAt,
+	)
+	if err != nil {
+		return FullCustomerRow{}, err
+	}
+	return customer, nil
 }

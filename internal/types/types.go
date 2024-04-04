@@ -242,4 +242,5 @@ type BucketStore interface {
 type CustomerStore interface {
 	CreateCustomer(CreateCustomerPayload) (uuid.UUID, error)
 	GetCustomers() ([]*Customer, error)
+	GetCustomer(id uuid.UUID) (*Customer, error)
 }

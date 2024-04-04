@@ -61,6 +61,19 @@ func (s *Store) GetCustomers() ([]*types.Customer, error) {
 	return customers, nil
 }
 
+func (s *Store) GetCustomer(id uuid.UUID) (*types.Customer, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
+
+	dbCustomer, err := queries.GetCustomerWithDetails(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	customer := convertDBCustomerToTypeCustomer(dbCustomer)
+	return customer, nil
+}
+
 func convertDBCustomerToTypeCustomer(dbCustomer db.FullCustomerRow) *types.Customer {
 	customer := &types.Customer{
 		ID: dbCustomer.Customer.ID,
