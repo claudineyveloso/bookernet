@@ -42,7 +42,7 @@ func (s *Store) CreatePerson(person types.CreatePersonPayload) error {
 		UpdatedAt:      person.UpdatedAt,
 	}
 	if err := queries.CreatePerson(ctx, createPersonParams); err != nil {
-		fmt.Println("Erro ao criar o endereço:", err)
+		fmt.Println("Erro ao criar a pessoa:", err)
 		return err
 	}
 	return nil

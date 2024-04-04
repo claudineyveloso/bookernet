@@ -78,10 +78,10 @@ func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleGetCustomers(w http.ResponseWriter, r *http.Request) {
-	users, err := h.customerStore.GetCustomers()
+	customers, err := h.customerStore.GetCustomers()
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Erro ao obter usuários: %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Erro ao obter cliente: %v", err), http.StatusInternalServerError)
 		return
 	}
-	utils.WriteJSON(w, http.StatusOK, users)
+	utils.WriteJSON(w, http.StatusOK, customers)
 }

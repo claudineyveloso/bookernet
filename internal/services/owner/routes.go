@@ -16,12 +16,13 @@ type Handler struct {
 	addressStore types.AddressStore
 }
 
-func NewHandler(ownerStore types.OwnerStore, personStore types.PersonStore, addressStore types.AddressStore) *Handler {
-	return &Handler{ownerStore: ownerStore, personStore: personStore, addressStore: addressStore}
+func NewHandler(ownerStore types.OwnerStore) *Handler {
+	return &Handler{ownerStore: ownerStore}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/create_owner", h.handleCreateOwner).Methods(http.MethodPost)
+	router.HandleFunc("/get_owners", h.handleGetOwners).Methods(http.MethodGet)
 }
 
 func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
@@ -74,4 +75,13 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusCreated, owner)
 
+}
+
+func (h *Handler) handleGetOwners(w http.ResponseWriter, r *http.Request) {
+	owners, err := h.ownerStore.GetOwners()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Erro ao obter proprietário: %v", err), http.StatusInternalServerError)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, owners)
 }

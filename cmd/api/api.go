@@ -4,12 +4,10 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/claudineyveloso/bookernet.git/internal/services/address"
 	"github.com/claudineyveloso/bookernet.git/internal/services/bucket"
 	"github.com/claudineyveloso/bookernet.git/internal/services/customer"
 	"github.com/claudineyveloso/bookernet.git/internal/services/healthy"
 	"github.com/claudineyveloso/bookernet.git/internal/services/owner"
-	"github.com/claudineyveloso/bookernet.git/internal/services/person"
 	"github.com/claudineyveloso/bookernet.git/internal/services/user"
 	"github.com/gorilla/mux"
 )
@@ -39,14 +37,14 @@ func (s *APIServer) Run() error {
 	bucketHandler.RegisterRoutes(r)
 
 	ownerStore := owner.NewStore(s.db)
-	personStore := person.NewStore(s.db)
-	addressStore := address.NewStore(s.db)
-	ownerHandler := owner.NewHandler(ownerStore, personStore, addressStore)
+	//personStore := person.NewStore(s.db)
+	//addressStore := address.NewStore(s.db)
+	ownerHandler := owner.NewHandler(ownerStore)
 	ownerHandler.RegisterRoutes(r)
 
 	customerStore := customer.NewStore(s.db)
-	personStore = person.NewStore(s.db)
-	addressStore = address.NewStore(s.db)
+	//personStore = person.NewStore(s.db)
+	//addressStore = address.NewStore(s.db)
 	customerHandler := customer.NewHandler(customerStore)
 	customerHandler.RegisterRoutes(r)
 
