@@ -62,6 +62,19 @@ func (s *Store) GetOwners() ([]*types.Owner, error) {
 	return owners, nil
 }
 
+func (s *Store) GetOwner(id uuid.UUID) (*types.Owner, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
+
+	dbOwner, err := queries.GetOwnerWithDetails(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	owner := convertDBOwnerToTypeOwner(dbOwner)
+	return owner, nil
+}
+
 func convertDBOwnerToTypeOwner(dbOwner db.FullOwnerRow) *types.Owner {
 	owner := &types.Owner{
 		ID:         dbOwner.Owner.ID,
