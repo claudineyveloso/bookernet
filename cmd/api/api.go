@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/claudineyveloso/bookernet.git/internal/services/bucket"
@@ -49,5 +50,6 @@ func (s *APIServer) Run() error {
 	typeServiceHandler := typeservice.NewHandler(typeServiceStore)
 	typeServiceHandler.RegisterRoutes(r)
 
+	fmt.Println("Server started on http://localhost:8080")
 	return http.ListenAndServe("localhost:8080", r)
 }

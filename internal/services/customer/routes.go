@@ -35,7 +35,7 @@ func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := utils.Validate.Struct(customer); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Payload inválido: %v", errors))
 		return
 	}
 	createdCustomer, err := h.customerStore.CreateCustomer(customer)
@@ -82,7 +82,7 @@ func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleGetCustomers(w http.ResponseWriter, r *http.Request) {
 	customers, err := h.customerStore.GetCustomers()
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Erro ao obter cliente: %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Erro ao obter o Cliente: %v", err), http.StatusInternalServerError)
 		return
 	}
 	utils.WriteJSON(w, http.StatusOK, customers)
@@ -92,12 +92,12 @@ func (h *Handler) handleGetCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	str, ok := vars["id"]
 	if !ok {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do cliente ausente"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do Cliente ausente!"))
 		return
 	}
 	parsedID, err := uuid.Parse(str)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do cliente inválido"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do Cliente inválido!"))
 		return
 	}
 

@@ -37,7 +37,7 @@ func (s *Store) CreateCustomer(customer types.CreateCustomerPayload) (uuid.UUID,
 	}
 
 	if err := queries.CreateCustomer(ctx, createCustomerParams); err != nil {
-		fmt.Println("Erro ao criar o cliente:", err)
+		fmt.Println("Erro ao criar o Cliente:", err)
 		return uuid.UUID{}, err
 	}
 	return customer.ID, nil

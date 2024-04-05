@@ -34,7 +34,7 @@ func (h *Handler) handleCreateTypeService(w http.ResponseWriter, r *http.Request
 	}
 	if err := utils.Validate.Struct(typeService); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Payload inválido: %v", errors))
 		return
 	}
 	err := h.typeServiceStore.CreateTypeService(typeService)
@@ -60,12 +60,12 @@ func (h *Handler) handleGetTypeService(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	str, ok := vars["typeServiceID"]
 	if !ok {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing product ID"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do Tipo de Serviço ausente!"))
 		return
 	}
 	parsedTypeServicesID, err := uuid.Parse(str)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid product ID"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do Tipo de Serviço inválido!"))
 		return
 	}
 

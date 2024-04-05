@@ -35,7 +35,7 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := utils.Validate.Struct(owner); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Payload inválido: %v", errors))
 		return
 	}
 	createdOwner, err := h.ownerStore.CreateOwner(owner)
@@ -82,7 +82,7 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleGetOwners(w http.ResponseWriter, r *http.Request) {
 	owners, err := h.ownerStore.GetOwners()
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Erro ao obter proprietário: %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Erro ao obter o Proprietário: %v", err), http.StatusInternalServerError)
 		return
 	}
 	utils.WriteJSON(w, http.StatusOK, owners)
@@ -92,12 +92,12 @@ func (h *Handler) handleGetOwner(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	str, ok := vars["id"]
 	if !ok {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do proprietário ausente"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do proprietário ausente!"))
 		return
 	}
 	parsedID, err := uuid.Parse(str)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do proprietário inválido"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do proprietário inválido!"))
 		return
 	}
 

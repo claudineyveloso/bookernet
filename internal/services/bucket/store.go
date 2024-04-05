@@ -41,7 +41,7 @@ func (s *Store) CreateBucket(bucket types.CreateBucketPayload) error {
 
 	if err := queries.CreateBucket(ctx, createBucketParams); err != nil {
 		//http.Error(_, "Erro ao criar usuário", http.StatusInternalServerError)
-		fmt.Println("Erro ao criar bucket:", err)
+		fmt.Println("Erro ao criar Bucket:", err)
 		return err
 	}
 	return nil

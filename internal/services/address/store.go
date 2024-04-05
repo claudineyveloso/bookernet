@@ -43,7 +43,7 @@ func (s *Store) CreateAddress(address types.CreateAddressPayload) error {
 		UpdatedAt:       address.UpdatedAt,
 	}
 	if err := queries.CreateAddress(ctx, createAddressParams); err != nil {
-		fmt.Println("Erro ao criar o endereço:", err)
+		fmt.Println("Erro ao criar o Endereço:", err)
 		return err
 	}
 	return nil

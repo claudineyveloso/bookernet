@@ -25,7 +25,7 @@ func (h *Handler) handleCreatePerson(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := utils.Validate.Struct(person); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Payload inválido: %v", errors))
 		return
 	}
 	err := h.personStore.CreatePerson(person)

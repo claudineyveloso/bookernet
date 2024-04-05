@@ -35,7 +35,7 @@ func (h *Handler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := utils.Validate.Struct(user); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Payload inválido: %v", errors))
 		return
 	}
 	err := h.userStore.CreateUser(user)
@@ -61,12 +61,12 @@ func (h *Handler) handleGetUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	str, ok := vars["userID"]
 	if !ok {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing product ID"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do Usuário ausente!"))
 		return
 	}
 	parsedUserID, err := uuid.Parse(str)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid product ID"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do Usuário inválido!"))
 		return
 	}
 
