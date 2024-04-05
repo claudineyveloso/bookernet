@@ -1,6 +1,10 @@
 package db
 
-import "context"
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
 
 // Defina uma nova struct para representar os dados completos do cliente
 type FullOwnerRow struct {
@@ -56,4 +60,41 @@ func (q *Queries) GetOwnersWithDetails(ctx context.Context) ([]FullOwnerRow, err
 		return nil, err
 	}
 	return owners, nil
+}
+
+func (q *Queries) GetOwnerWithDetails(ctx context.Context, id uuid.UUID) (FullOwnerRow, error) {
+	var owner FullOwnerRow
+	err := q.db.QueryRowContext(ctx, getOwner, id).Scan(
+		&owner.Owner.ID,
+		&owner.Owner.PeopleType,
+		&owner.Owner.IsActive,
+		&owner.Owner.BucketID,
+		&owner.Owner.CreatedAt,
+		&owner.Owner.UpdatedAt,
+		&owner.Person.ID,
+		&owner.Person.FirstName,
+		&owner.Person.LastName,
+		&owner.Person.Email,
+		&owner.Person.Phone,
+		&owner.Person.CellPhone,
+		&owner.Person.PersonableID,
+		&owner.Person.PersonableType,
+		&owner.Person.CreatedAt,
+		&owner.Person.UpdatedAt,
+		&owner.Address.ID,
+		&owner.Address.PublicPlace,
+		&owner.Address.Complement,
+		&owner.Address.Neighborhood,
+		&owner.Address.City,
+		&owner.Address.State,
+		&owner.Address.ZipCode,
+		&owner.Address.AddressableID,
+		&owner.Address.AddressableType,
+		&owner.Address.CreatedAt,
+		&owner.Address.UpdatedAt,
+	)
+	if err != nil {
+		return FullOwnerRow{}, err
+	}
+	return owner, nil
 }

@@ -247,6 +247,7 @@ type PersonStore interface {
 type OwnerStore interface {
 	CreateOwner(CreateOwnerPayload) (uuid.UUID, error)
 	GetOwners() ([]*Owner, error)
+	GetOwner(id uuid.UUID) (*Owner, error)
 }
 
 type BucketStore interface {

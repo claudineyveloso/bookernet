@@ -92,12 +92,12 @@ func (h *Handler) handleGetCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	str, ok := vars["id"]
 	if !ok {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing product ID"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do cliente ausente"))
 		return
 	}
 	parsedID, err := uuid.Parse(str)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid product ID"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do cliente inválido"))
 		return
 	}
 

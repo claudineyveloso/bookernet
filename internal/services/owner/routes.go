@@ -7,6 +7,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/types"
 	"github.com/claudineyveloso/bookernet.git/internal/utils"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -23,6 +24,7 @@ func NewHandler(ownerStore types.OwnerStore) *Handler {
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/create_owner", h.handleCreateOwner).Methods(http.MethodPost)
 	router.HandleFunc("/get_owners", h.handleGetOwners).Methods(http.MethodGet)
+	router.HandleFunc("/get_owner/{id}", h.handleGetOwner).Methods(http.MethodGet)
 }
 
 func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
@@ -84,4 +86,25 @@ func (h *Handler) handleGetOwners(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	utils.WriteJSON(w, http.StatusOK, owners)
+}
+
+func (h *Handler) handleGetOwner(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	str, ok := vars["id"]
+	if !ok {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do proprietário ausente"))
+		return
+	}
+	parsedID, err := uuid.Parse(str)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("ID do proprietário inválido"))
+		return
+	}
+
+	user, err := h.ownerStore.GetOwner(parsedID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, user)
 }
