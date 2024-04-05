@@ -133,6 +133,14 @@ type GetOwnerRow struct {
 	UpdatedAt_3     time.Time `json:"updated_at_3"`
 }
 
+type TypeService struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	Duration  int32     `json:"duration"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -212,6 +220,14 @@ type UpdateUserPayload struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type CreateTypeServicePayload struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name" validate:"required"`
+	Duration  int32     `json:"duration" validate:"required"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type UserStore interface {
 	CreateUser(CreateUserPayload) error
 	GetUsers() ([]*User, error)
@@ -243,4 +259,10 @@ type CustomerStore interface {
 	CreateCustomer(CreateCustomerPayload) (uuid.UUID, error)
 	GetCustomers() ([]*Customer, error)
 	GetCustomer(id uuid.UUID) (*Customer, error)
+}
+
+type TypeServiceStore interface {
+	CreateTypeService(CreateTypeServicePayload) error
+	GetTypeServices() ([]*TypeService, error)
+	GetTypeServiceByID(id uuid.UUID) (*TypeService, error)
 }

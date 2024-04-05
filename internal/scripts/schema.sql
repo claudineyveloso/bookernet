@@ -147,7 +147,7 @@ ADD
 CREATE TABLE IF NOT EXISTS type_services (
 	ID 					UUID PRIMARY KEY,
 	name				VARCHAR(100) NOT NULL,
-	duration		TIME NOT NULL,
+	duration		INTEGER NOT NULL,
 	created_at  TIMESTAMP NOT NULL,
 	updated_at 	TIMESTAMP NOT NULL
 );

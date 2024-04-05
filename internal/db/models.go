@@ -142,7 +142,7 @@ type RolesUser struct {
 type TypeService struct {
 	ID        uuid.UUID `json:"id"`
 	Name      string    `json:"name"`
-	Duration  time.Time `json:"duration"`
+	Duration  int32     `json:"duration"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

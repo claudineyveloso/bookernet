@@ -10,6 +10,7 @@ sql:
       - "internal/scripts/person.sql"
       - "internal/scripts/address.sql"
       - "internal/scripts/customer.sql"
+      - "internal/scripts/type_service.sql"
     gen:
       go:
         package: "db"
