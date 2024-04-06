@@ -77,6 +77,28 @@ func (q *Queries) GetBucket(ctx context.Context, id uuid.UUID) (Bucket, error) {
 	return i, err
 }
 
+const getBucketByName = `-- name: GetBucketByName :one
+SELECT id, description, name, aws_access_key_id, aws_secret_access_key, aws_region, created_at, updated_at
+FROM buckets
+WHERE buckets.name = $1
+`
+
+func (q *Queries) GetBucketByName(ctx context.Context, name string) (Bucket, error) {
+	row := q.db.QueryRowContext(ctx, getBucketByName, name)
+	var i Bucket
+	err := row.Scan(
+		&i.ID,
+		&i.Description,
+		&i.Name,
+		&i.AwsAccessKeyID,
+		&i.AwsSecretAccessKey,
+		&i.AwsRegion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getBuckets = `-- name: GetBuckets :many
 SELECT id, description, name, aws_access_key_id, aws_secret_access_key, aws_region, created_at, updated_at
 FROM buckets

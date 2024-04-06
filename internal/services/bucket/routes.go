@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/claudineyveloso/bookernet.git/internal/services/auth"
 	"github.com/claudineyveloso/bookernet.git/internal/types"
 	"github.com/claudineyveloso/bookernet.git/internal/utils"
 	"github.com/go-playground/validator/v10"
@@ -13,15 +14,17 @@ import (
 
 type Handler struct {
 	bucketStore types.BucketStore
+	userStore   types.UserStore
 }
 
-func NewHandler(bucketStore types.BucketStore) *Handler {
-	return &Handler{bucketStore: bucketStore}
+func NewHandler(bucketStore types.BucketStore, userStore types.UserStore) *Handler {
+	return &Handler{bucketStore: bucketStore, userStore: userStore}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/create_bucket", h.handleCreateBucket).Methods(http.MethodPost)
-	router.HandleFunc("/get_buckets", h.handleGetBuckets).Methods(http.MethodGet)
+	//router.HandleFunc("/get_buckets", h.handleGetBuckets).Methods(http.MethodGet)
+	router.HandleFunc("/get_buckets", auth.WithJWTAuth(h.handleGetBuckets, h.userStore)).Methods(http.MethodPost)
 	router.HandleFunc("/get_bucket/{bucketID}", h.handleGetBucket).Methods(http.MethodGet)
 
 }
@@ -48,6 +51,8 @@ func (h *Handler) handleCreateBucket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleGetBuckets(w http.ResponseWriter, r *http.Request) {
+	userID := auth.GetUserIDFromContext(r.Context())
+	fmt.Println("Valor de userID", userID)
 	buckets, err := h.bucketStore.GetBuckets()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erro ao obter o Bucket: %v", err), http.StatusInternalServerError)

@@ -11,6 +11,11 @@ WHERE type_services.id = $1;
 SELECT *
 FROM type_services;
 
+-- name: GetTypeServiceByName :one
+SELECT *
+FROM type_services
+WHERE type_services.name = $1;
+
 -- name: UpdateTypeService :exec
 UPDATE type_services SET name = $2, duration = $3, updated_at = $4 WHERE type_services.id = $1;
 

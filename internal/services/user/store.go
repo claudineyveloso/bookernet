@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/claudineyveloso/bookernet.git/internal/db"
+	"github.com/claudineyveloso/bookernet.git/internal/services/auth"
 	"github.com/claudineyveloso/bookernet.git/internal/types"
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type Store struct {
@@ -28,18 +28,16 @@ func (s *Store) CreateUser(user types.CreateUserPayload) error {
 	now := time.Now()
 	user.CreatedAt = now
 	user.UpdatedAt = now
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashedPassword, err := auth.HashPassword(user.Password)
 	if err != nil {
 		fmt.Println("Erro ao gerar hash da senha:", err)
 		return err
 	}
-	hashedPasswordString := string(hashedPassword)
 
 	createUserParams := db.CreateUserParams{
 		ID:        user.ID,
 		Email:     user.Email,
-		Password:  hashedPasswordString,
+		Password:  string(hashedPassword),
 		IsActive:  user.IsActive,
 		UserType:  user.UserType,
 		CreatedAt: user.CreatedAt,
@@ -82,6 +80,28 @@ func (s *Store) GetUserByID(userID uuid.UUID) (*types.User, error) {
 
 	return user, nil
 
+}
+
+func (s *Store) GetUserByEmail(email string) (*types.User, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
+
+	dbUser, err := queries.GetUserByEmail(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+
+	// Aqui você precisa converter dbUser para o tipo *types.User, se necessário
+	user := &types.User{
+		ID:       dbUser.ID,
+		Email:    dbUser.Email,
+		Password: dbUser.Password,
+		IsActive: dbUser.IsActive,
+		UserType: dbUser.UserType,
+		// Atribua outros campos conforme necessário
+	}
+
+	return user, nil
 }
 
 func scanRowsIntoUser(rows *sql.Rows) (*types.User, error) {

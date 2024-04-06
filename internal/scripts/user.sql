@@ -11,6 +11,11 @@ WHERE users.id = $1;
 SELECT *
 FROM users;
 
+-- name: GetUserByEmail :one
+SELECT *
+FROM users
+WHERE users.email = $1;
+
 -- name: DisableUser :exec
 UPDATE users SET is_active = $2, updated_at = $3 WHERE users.id = $1;
 
