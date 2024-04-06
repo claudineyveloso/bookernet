@@ -220,6 +220,18 @@ type UpdateUserPayload struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type RegisterUserPayload struct {
+	//FirstName string `json:"firstName" validate:"required"`
+	//LastName  string `json:"lastName" validate:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=3,max=130"`
+}
+
+type LoginUserPayload struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
 type CreateTypeServicePayload struct {
 	ID        uuid.UUID `json:"id"`
 	Name      string    `json:"name" validate:"required"`
@@ -232,6 +244,7 @@ type UserStore interface {
 	CreateUser(CreateUserPayload) error
 	GetUsers() ([]*User, error)
 	GetUserByID(id uuid.UUID) (*User, error)
+	GetUserByEmail(email string) (*User, error)
 	//UpdateUser(User) error
 	//UpdateUser(User) error
 }

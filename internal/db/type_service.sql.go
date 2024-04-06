@@ -68,6 +68,25 @@ func (q *Queries) GetTypeService(ctx context.Context, id uuid.UUID) (TypeService
 	return i, err
 }
 
+const getTypeServiceByName = `-- name: GetTypeServiceByName :one
+SELECT id, name, duration, created_at, updated_at
+FROM type_services
+WHERE type_services.name = $1
+`
+
+func (q *Queries) GetTypeServiceByName(ctx context.Context, name string) (TypeService, error) {
+	row := q.db.QueryRowContext(ctx, getTypeServiceByName, name)
+	var i TypeService
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Duration,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getTypeServices = `-- name: GetTypeServices :many
 SELECT id, name, duration, created_at, updated_at
 FROM type_services

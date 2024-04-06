@@ -11,6 +11,11 @@ WHERE buckets.id = $1;
 SELECT *
 FROM buckets;
 
+-- name: GetBucketByName :one
+SELECT *
+FROM buckets
+WHERE buckets.name = $1;
+
 -- name: UpdateBucket :exec
 UPDATE buckets SET description = $2, name = $3, aws_access_key_id = $4, aws_secret_access_key = $5, aws_region = $6, updated_at = $7 WHERE buckets.id = $1;
 
