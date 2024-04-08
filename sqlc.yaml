@@ -11,6 +11,8 @@ sql:
       - "internal/scripts/address.sql"
       - "internal/scripts/customer.sql"
       - "internal/scripts/type_service.sql"
+      - "internal/scripts/interval.sql"
+      - "internal/scripts/attendance.sql"
     gen:
       go:
         package: "db"
