@@ -141,6 +141,14 @@ type TypeService struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type Interval struct {
+	ID              uuid.UUID `json:"id"`
+	OwnerID         uuid.UUID `json:"owner_id"`
+	IntervalMinutes int32     `json:"interval_minutes"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -240,6 +248,14 @@ type CreateTypeServicePayload struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type CreateIntervalPayload struct {
+	ID              uuid.UUID `json:"id"`
+	OwnerID         uuid.UUID `json:"owner_id" validate:"required"`
+	IntervalMinutes int32     `json:"interval_minutes" validate:"required"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+}
+
 type UserStore interface {
 	CreateUser(CreateUserPayload) error
 	GetUsers() ([]*User, error)
@@ -279,4 +295,10 @@ type TypeServiceStore interface {
 	CreateTypeService(CreateTypeServicePayload) error
 	GetTypeServices() ([]*TypeService, error)
 	GetTypeServiceByID(id uuid.UUID) (*TypeService, error)
+}
+
+type IntervalStore interface {
+	CreateInterval(CreateIntervalPayload) error
+	GetIntervals() ([]*Interval, error)
+	GetIntervalByID(id uuid.UUID) (*Interval, error)
 }

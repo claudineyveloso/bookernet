@@ -58,7 +58,7 @@ func (s *Store) GetBuckets() ([]*types.Bucket, error) {
 
 	var buckets []*types.Bucket
 	for _, dbBucket := range dbBuckets {
-		bucket := convertDBUserToUser(dbBucket)
+		bucket := convertDBBucketToBucket(dbBucket)
 		buckets = append(buckets, bucket)
 	}
 	return buckets, nil
@@ -71,33 +71,33 @@ func (s *Store) GetBucketByID(bucketID uuid.UUID) (*types.Bucket, error) {
 	if err != nil {
 		return nil, err
 	}
-	user := convertDBUserToUser(dbBucket)
-
-	return user, nil
-
-}
-
-func scanRowsIntoUser(rows *sql.Rows) (*types.Bucket, error) {
-	bucket := new(types.Bucket)
-
-	err := rows.Scan(
-		&bucket.ID,
-		&bucket.Description,
-		&bucket.Name,
-		&bucket.AwsAccessKeyID,
-		&bucket.AwsSecretAccessKey,
-		&bucket.AwsRegion,
-		&bucket.CreatedAt,
-		&bucket.UpdatedAt,
-	)
-	if err != nil {
-		return nil, err
-	}
+	bucket := convertDBBucketToBucket(dbBucket)
 
 	return bucket, nil
+
 }
 
-func convertDBUserToUser(dbBucket db.Bucket) *types.Bucket {
+// func scanRowsIntoUser(rows *sql.Rows) (*types.Bucket, error) {
+// 	bucket := new(types.Bucket)
+
+// 	err := rows.Scan(
+// 		&bucket.ID,
+// 		&bucket.Description,
+// 		&bucket.Name,
+// 		&bucket.AwsAccessKeyID,
+// 		&bucket.AwsSecretAccessKey,
+// 		&bucket.AwsRegion,
+// 		&bucket.CreatedAt,
+// 		&bucket.UpdatedAt,
+// 	)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return bucket, nil
+// }
+
+func convertDBBucketToBucket(dbBucket db.Bucket) *types.Bucket {
 	bucket := &types.Bucket{
 		ID:                 dbBucket.ID,
 		Description:        dbBucket.Description,

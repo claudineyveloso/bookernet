@@ -51,8 +51,8 @@ func (h *Handler) handleCreateBucket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleGetBuckets(w http.ResponseWriter, r *http.Request) {
-	userID := auth.GetUserIDFromContext(r.Context())
-	fmt.Println("Valor de userID", userID)
+	bucketID := auth.GetUserIDFromContext(r.Context())
+	fmt.Println("Valor de userID", bucketID)
 	buckets, err := h.bucketStore.GetBuckets()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erro ao obter o Bucket: %v", err), http.StatusInternalServerError)

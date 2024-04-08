@@ -68,9 +68,9 @@ func (s *Store) GetTypeServiceByID(typeServicesID uuid.UUID) (*types.TypeService
 	if err != nil {
 		return nil, err
 	}
-	user := convertDBTypeServiceToTypeService(dbTypeService)
+	type_service := convertDBTypeServiceToTypeService(dbTypeService)
 
-	return user, nil
+	return type_service, nil
 
 }
 
