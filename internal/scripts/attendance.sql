@@ -24,6 +24,7 @@ DELETE FROM attendances
 WHERE attendances.id = $1
 AND NOT EXISTS (
     SELECT 1 FROM owners WHERE owner_id = $1
-    AND
+)
+AND NOT EXISTS (
     SELECT 1 FROM type_services WHERE type_service_id = $1
 );
