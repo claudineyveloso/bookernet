@@ -19,11 +19,11 @@ var Envs = InitConfig()
 
 func InitConfig() Config {
 	return Config{
-		PublicHost:             getEnv("PUBLIC_HOST", "localhost"),
-		Port:                   getEnv("PORT", "5432"),
-		DBUser:                 getEnv("DB_USER", "user_bookernet_development"),
-		DBPassword:             getEnv("DB_PASSWORD", "pwd_bookernet_development"),
-		DBName:                 getEnv("DB_NAME", "bookernet_development"),
+		PublicHost:             os.Getenv("PUBLIC_HOST"),
+		Port:                   os.Getenv("DB_PORT"),
+		DBUser:                 os.Getenv("DB_USER"),
+		DBPassword:             os.Getenv("DB_PASSWORD"),
+		DBName:                 os.Getenv("DB_NAME"),
 		JWTSecret:              getEnv("JWT_SECRET", "not-so-secret-now-is-it?"),
 		JWTExpirationInSeconds: getEnvAsInt("JWT_EXPIRATION_IN_SECONDS", 3600*24*7),
 	}
