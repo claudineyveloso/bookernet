@@ -19,11 +19,8 @@ type contextKey string
 const UserKey contextKey = "userID"
 
 func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.HandlerFunc {
-	fmt.Println("GetTokenFromRequest", store)
 	return func(w http.ResponseWriter, r *http.Request) {
 		tokenString := utils.GetTokenFromRequest(r)
-		fmt.Println("GetTokenFromRequest", tokenString)
-
 		token, err := validateJWT(tokenString)
 		if err != nil {
 			log.Printf("failed to validate token: %v", err)
