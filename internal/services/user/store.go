@@ -104,25 +104,6 @@ func (s *Store) GetUserByEmail(email string) (*types.User, error) {
 	return user, nil
 }
 
-func scanRowsIntoUser(rows *sql.Rows) (*types.User, error) {
-	user := new(types.User)
-
-	err := rows.Scan(
-		&user.ID,
-		&user.Email,
-		&user.Password,
-		&user.IsActive,
-		&user.UserType,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
-}
-
 func convertDBUserToUser(dbUser db.User) *types.User {
 	user := &types.User{
 		ID:        dbUser.ID,

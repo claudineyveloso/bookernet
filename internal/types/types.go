@@ -162,6 +162,14 @@ type Attendance struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
+type Insurance struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	Period    string    `json:"period"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -282,6 +290,14 @@ type CreateAttendancePayload struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
+type CreateInsurancePayload struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name" validate:"required"`
+	Period    string    `json:"period" validate:"required"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type UserStore interface {
 	CreateUser(CreateUserPayload) error
 	GetUsers() ([]*User, error)
@@ -333,4 +349,10 @@ type AttendanceStore interface {
 	CreateAttendance(CreateAttendancePayload) error
 	GetAttendances() ([]*Attendance, error)
 	GetAttendanceByID(id uuid.UUID) (*Attendance, error)
+}
+
+type InsuranceStore interface {
+	CreateInsurance(CreateInsurancePayload) error
+	GetInsurances() ([]*Insurance, error)
+	GetInsuranceByID(id uuid.UUID) (*Insurance, error)
 }

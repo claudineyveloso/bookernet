@@ -13,6 +13,7 @@ sql:
       - "internal/scripts/type_service.sql"
       - "internal/scripts/interval.sql"
       - "internal/scripts/attendance.sql"
+      - "internal/scripts/insurance.sql"
     gen:
       go:
         package: "db"

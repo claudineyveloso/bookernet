@@ -18,7 +18,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 `
 
 type CreateAttendanceParams struct {
-  ID            uuid.UUID `json:"id"`
+	ID            uuid.UUID `json:"id"`
 	DateService   time.Time `json:"date_service"`
 	StartService  time.Time `json:"start_service"`
 	EndService    time.Time `json:"end_service"`

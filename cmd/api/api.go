@@ -9,6 +9,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/services/bucket"
 	"github.com/claudineyveloso/bookernet.git/internal/services/customer"
 	"github.com/claudineyveloso/bookernet.git/internal/services/healthy"
+	"github.com/claudineyveloso/bookernet.git/internal/services/insurance"
 	"github.com/claudineyveloso/bookernet.git/internal/services/interval"
 	"github.com/claudineyveloso/bookernet.git/internal/services/owner"
 	typeservice "github.com/claudineyveloso/bookernet.git/internal/services/type_service"
@@ -56,9 +57,13 @@ func (s *APIServer) Run() error {
 	intervalHandler := interval.NewHandler(intervalStore)
 	intervalHandler.RegisterRoutes(r)
 
-  attendanceStore := attendance.NewStore(s.db)
-  attendanceHandler := attendance.NewHandler(attendanceStore)
-  attendanceHandler.RegisterRoutes(r)
+	attendanceStore := attendance.NewStore(s.db)
+	attendanceHandler := attendance.NewHandler(attendanceStore)
+	attendanceHandler.RegisterRoutes(r)
+
+	insuranceStore := insurance.NewStore(s.db)
+	insuranceHandler := insurance.NewHandler(insuranceStore)
+	insuranceHandler.RegisterRoutes(r)
 
 	fmt.Println("Server started on http://localhost:8080")
 	return http.ListenAndServe("localhost:8080", r)
