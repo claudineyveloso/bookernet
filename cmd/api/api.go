@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/claudineyveloso/bookernet.git/internal/services/attendance"
 	"github.com/claudineyveloso/bookernet.git/internal/services/bucket"
 	"github.com/claudineyveloso/bookernet.git/internal/services/customer"
 	"github.com/claudineyveloso/bookernet.git/internal/services/healthy"
@@ -54,6 +55,10 @@ func (s *APIServer) Run() error {
 	intervalStore := interval.NewStore(s.db)
 	intervalHandler := interval.NewHandler(intervalStore)
 	intervalHandler.RegisterRoutes(r)
+
+  attendanceStore := attendance.NewStore(s.db)
+  attendanceHandler := attendance.NewHandler(attendanceStore)
+  attendanceHandler.RegisterRoutes(r)
 
 	fmt.Println("Server started on http://localhost:8080")
 	return http.ListenAndServe("localhost:8080", r)
