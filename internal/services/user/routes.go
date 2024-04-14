@@ -33,7 +33,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
-	var user types.LoginUserPayload
+	var user types.CreateLoginPayload
 	if err := utils.ParseJSON(r, &user); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
@@ -45,14 +45,9 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := h.userStore.GetUserByEmail(user.Email)
+	u, err := h.userStore.LoginUser(user)
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("not found, invalid email or password"))
-		return
-	}
-
-	if !auth.ComparePasswords(u.Password, []byte(user.Password)) {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid email or password"))
 		return
 	}
 
@@ -63,7 +58,14 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
+	response := types.LoginResponse{
+		Email:    u.Email,
+		IsActive: u.IsActive,
+		UserType: u.UserType,
+		Token:    token,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
 // func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {

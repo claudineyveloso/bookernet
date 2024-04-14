@@ -170,6 +170,11 @@ type Insurance struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type Login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 type CreateUserPayload struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email" validate:"required"`
@@ -256,9 +261,16 @@ type RegisterUserPayload struct {
 	Password string `json:"password" validate:"required,min=3,max=130"`
 }
 
-type LoginUserPayload struct {
+type CreateLoginPayload struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
+}
+
+type LoginResponse struct {
+	Email    string `json:"email"`
+	IsActive bool   `json:"is_active"`
+	UserType string `json:"user_type"`
+	Token    string `json:"token"`
 }
 
 type CreateTypeServicePayload struct {
@@ -303,7 +315,7 @@ type UserStore interface {
 	GetUsers() ([]*User, error)
 	GetUserByID(id uuid.UUID) (*User, error)
 	GetUserByEmail(email string) (*User, error)
-	//UpdateUser(User) error
+	LoginUser(user CreateLoginPayload) (*User, error)
 	//UpdateUser(User) error
 }
 

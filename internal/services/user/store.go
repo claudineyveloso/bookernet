@@ -104,6 +104,34 @@ func (s *Store) GetUserByEmail(email string) (*types.User, error) {
 	return user, nil
 }
 
+func (s *Store) LoginUser(user types.CreateLoginPayload) (*types.User, error) {
+	queries := db.New(s.db)
+	ctx := context.Background()
+
+	dbUser, err := queries.GetUserByEmail(ctx, user.Email)
+	if err != nil {
+		return nil, err
+	}
+	if !auth.ComparePasswords(dbUser.Password, []byte(user.Password)) {
+		return nil, fmt.Errorf("senha inválida")
+	}
+
+	loginUserParams := db.LoginUserParams{
+		Email:    user.Email,
+		Password: dbUser.Password,
+	}
+
+	loggedUser, err := queries.LoginUser(ctx, loginUserParams)
+	if err != nil {
+		fmt.Println("Erro ao fazer login do usuário:", err)
+		return nil, err
+	}
+	convertedUser := convertDBUserToUser(loggedUser)
+
+	fmt.Println("Usuário logado:", loggedUser)
+	return convertedUser, nil
+}
+
 func convertDBUserToUser(dbUser db.User) *types.User {
 	user := &types.User{
 		ID:        dbUser.ID,

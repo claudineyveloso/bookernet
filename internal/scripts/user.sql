@@ -16,6 +16,11 @@ SELECT *
 FROM users
 WHERE users.email = $1;
 
+-- name: LoginUser :one
+SELECT *
+FROM users
+WHERE users.email = $1 AND users.password = $2;
+
 -- name: DisableUser :exec
 UPDATE users SET is_active = $2, updated_at = $3 WHERE users.id = $1;
 
