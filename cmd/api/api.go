@@ -14,6 +14,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/services/owner"
 	typeservice "github.com/claudineyveloso/bookernet.git/internal/services/type_service"
 	"github.com/claudineyveloso/bookernet.git/internal/services/user"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -66,5 +67,11 @@ func (s *APIServer) Run() error {
 	insuranceHandler.RegisterRoutes(r)
 
 	fmt.Println("Server started on http://localhost:8080")
-	return http.ListenAndServe("localhost:8080", r)
+	//return http.ListenAndServe("localhost:8080", r)
+	return http.ListenAndServe("localhost:8080",
+		handlers.CORS(
+			handlers.AllowedOrigins([]string{"*"}),
+			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+			handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+		)(r))
 }
