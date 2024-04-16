@@ -128,7 +128,6 @@ func (s *Store) LoginUser(user types.CreateLoginPayload) (*types.User, error) {
 	}
 	convertedUser := convertDBUserToUser(loggedUser)
 
-	fmt.Println("Usuário logado:", loggedUser)
 	return convertedUser, nil
 }
 

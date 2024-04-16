@@ -39,7 +39,7 @@ func (s *APIServer) Run() error {
 	userHandler.RegisterRoutes(r)
 
 	bucketStore := bucket.NewStore(s.db)
-	bucketHandler := bucket.NewHandler(bucketStore, userStore)
+	bucketHandler := bucket.NewHandler(bucketStore)
 	bucketHandler.RegisterRoutes(r)
 
 	ownerStore := owner.NewStore(s.db)

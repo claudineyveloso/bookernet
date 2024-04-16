@@ -41,7 +41,7 @@ func (s *Store) CreateBucket(bucket types.CreateBucketPayload) error {
 
 	if err := queries.CreateBucket(ctx, createBucketParams); err != nil {
 		//http.Error(_, "Erro ao criar usuário", http.StatusInternalServerError)
-		fmt.Println("Erro ao criar Bucket:", err)
+		fmt.Println("Erro ao criar um Bucket:", err)
 		return err
 	}
 	return nil
@@ -77,25 +77,40 @@ func (s *Store) GetBucketByID(bucketID uuid.UUID) (*types.Bucket, error) {
 
 }
 
-// func scanRowsIntoUser(rows *sql.Rows) (*types.Bucket, error) {
-// 	bucket := new(types.Bucket)
+func (s *Store) UpdateBucket(bucket types.UpdateBucketPayload) error {
+	queries := db.New(s.db)
+	ctx := context.Background()
 
-// 	err := rows.Scan(
-// 		&bucket.ID,
-// 		&bucket.Description,
-// 		&bucket.Name,
-// 		&bucket.AwsAccessKeyID,
-// 		&bucket.AwsSecretAccessKey,
-// 		&bucket.AwsRegion,
-// 		&bucket.CreatedAt,
-// 		&bucket.UpdatedAt,
-// 	)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	now := time.Now()
+	bucket.UpdatedAt = now
 
-// 	return bucket, nil
-// }
+	updateBucketParams := db.UpdateBucketParams{
+		ID:                 bucket.ID,
+		Description:        bucket.Description,
+		Name:               bucket.Name,
+		AwsAccessKeyID:     bucket.AwsAccessKeyID,
+		AwsSecretAccessKey: bucket.AwsSecretAccessKey,
+		AwsRegion:          bucket.AwsRegion,
+		UpdatedAt:          bucket.UpdatedAt,
+	}
+
+	if err := queries.UpdateBucket(ctx, updateBucketParams); err != nil {
+		fmt.Println("Erro ao atualizar um Bucket:", err)
+		return err
+	}
+	return nil
+
+}
+
+func (s *Store) DeleteBucket(bucketID uuid.UUID) error {
+	queries := db.New(s.db)
+	ctx := context.Background()
+	err := queries.DeleteBucket(ctx, bucketID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 func convertDBBucketToBucket(dbBucket db.Bucket) *types.Bucket {
 	bucket := &types.Bucket{

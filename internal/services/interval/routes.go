@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/claudineyveloso/bookernet.git/internal/services/auth"
 	"github.com/claudineyveloso/bookernet.git/internal/types"
 	"github.com/claudineyveloso/bookernet.git/internal/utils"
 	"github.com/go-playground/validator/v10"
@@ -49,8 +50,8 @@ func (h *Handler) handleCreateInterval(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleGetIntervals(w http.ResponseWriter, r *http.Request) {
-	//bucketID := auth.GetUserIDFromContext(r.Context())
-	//fmt.Println("Valor de userID", bucketID)
+	bucketID := auth.GetUserIDFromContext(r.Context())
+	fmt.Println("Valor de userID", bucketID)
 	intervals, err := h.intervalStore.GetIntervals()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erro ao obter o Intervalo: %v", err), http.StatusInternalServerError)

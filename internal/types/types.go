@@ -224,12 +224,22 @@ type CreateOwnerPayload struct {
 }
 type CreateBucketPayload struct {
 	ID                 uuid.UUID `json:"id"`
-	Description        string    `json:"description" validate:"required"`
+	Description        string    `json:"description"`
 	Name               string    `json:"name" validate:"required"`
 	AwsAccessKeyID     string    `json:"aws_access_key_id" validate:"required"`
 	AwsSecretAccessKey string    `json:"aws_secret_access_key" validate:"required"`
 	AwsRegion          string    `json:"aws_region" validate:"required"`
 	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
+
+type UpdateBucketPayload struct {
+	ID                 uuid.UUID `json:"id"`
+	Description        string    `json:"description"`
+	Name               string    `json:"name" validate:"required"`
+	AwsAccessKeyID     string    `json:"aws_access_key_id" validate:"required"`
+	AwsSecretAccessKey string    `json:"aws_secret_access_key" validate:"required"`
+	AwsRegion          string    `json:"aws_region" validate:"required"`
 	UpdatedAt          time.Time `json:"updated_at"`
 }
 
@@ -337,6 +347,8 @@ type BucketStore interface {
 	CreateBucket(CreateBucketPayload) error
 	GetBuckets() ([]*Bucket, error)
 	GetBucketByID(id uuid.UUID) (*Bucket, error)
+	UpdateBucket(UpdateBucketPayload) error
+	DeleteBucket(id uuid.UUID) error
 }
 
 type CustomerStore interface {
