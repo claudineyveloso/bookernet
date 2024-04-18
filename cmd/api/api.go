@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/claudineyveloso/bookernet.git/internal/services/address"
 	"github.com/claudineyveloso/bookernet.git/internal/services/attendance"
 	"github.com/claudineyveloso/bookernet.git/internal/services/bucket"
 	"github.com/claudineyveloso/bookernet.git/internal/services/customer"
@@ -12,6 +13,7 @@ import (
 	"github.com/claudineyveloso/bookernet.git/internal/services/insurance"
 	"github.com/claudineyveloso/bookernet.git/internal/services/interval"
 	"github.com/claudineyveloso/bookernet.git/internal/services/owner"
+	"github.com/claudineyveloso/bookernet.git/internal/services/person"
 	typeservice "github.com/claudineyveloso/bookernet.git/internal/services/type_service"
 	"github.com/claudineyveloso/bookernet.git/internal/services/user"
 	"github.com/gorilla/handlers"
@@ -43,7 +45,9 @@ func (s *APIServer) Run() error {
 	bucketHandler.RegisterRoutes(r)
 
 	ownerStore := owner.NewStore(s.db)
-	ownerHandler := owner.NewHandler(ownerStore)
+	personStore := person.NewStore(s.db)
+	addressStore := address.NewStore(s.db)
+	ownerHandler := owner.NewHandler(ownerStore, personStore, addressStore)
 	ownerHandler.RegisterRoutes(r)
 
 	customerStore := customer.NewStore(s.db)

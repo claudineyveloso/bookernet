@@ -17,8 +17,8 @@ type Handler struct {
 	addressStore types.AddressStore
 }
 
-func NewHandler(ownerStore types.OwnerStore) *Handler {
-	return &Handler{ownerStore: ownerStore}
+func NewHandler(ownerStore types.OwnerStore, personStore types.PersonStore, addressStore types.AddressStore) *Handler {
+	return &Handler{ownerStore: ownerStore, personStore: personStore, addressStore: addressStore}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
@@ -53,7 +53,6 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 		PersonableID:   createdOwner,
 		PersonableType: "owner",
 	}
-
 	if err := h.personStore.CreatePerson(person); err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
