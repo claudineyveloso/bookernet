@@ -30,8 +30,8 @@ func (s *Store) CreateCustomer(customer types.CreateCustomerPayload) (uuid.UUID,
 	customer.UpdatedAt = now
 
 	createCustomerParams := db.CreateCustomerParams{
-		ID: customer.ID,
-		//Birthday:  utils.CreateNullDate(customer.Birthday),
+		ID:        customer.ID,
+		Birthday:  sql.NullTime{},
 		CreatedAt: customer.CreatedAt,
 		UpdatedAt: customer.UpdatedAt,
 	}

@@ -51,7 +51,9 @@ func (s *APIServer) Run() error {
 	ownerHandler.RegisterRoutes(r)
 
 	customerStore := customer.NewStore(s.db)
-	customerHandler := customer.NewHandler(customerStore)
+	personStore = person.NewStore(s.db)
+	addressStore = address.NewStore(s.db)
+	customerHandler := customer.NewHandler(customerStore, personStore, addressStore)
 	customerHandler.RegisterRoutes(r)
 
 	typeServiceStore := typeservice.NewStore(s.db)
