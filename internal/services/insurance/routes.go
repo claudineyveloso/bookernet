@@ -28,7 +28,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateInsurance(w http.ResponseWriter, r *http.Request) {
-	var insurance types.CreateInsurancePayload
+	var insurance types.InsurancePayload
 	if err := utils.ParseJSON(r, &insurance); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

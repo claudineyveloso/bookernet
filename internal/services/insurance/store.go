@@ -19,7 +19,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateInsurance(insurance types.CreateInsurancePayload) error {
+func (s *Store) CreateInsurance(insurance types.InsurancePayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 
