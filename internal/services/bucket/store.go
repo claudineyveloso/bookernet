@@ -19,7 +19,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateBucket(bucket types.CreateBucketPayload) error {
+func (s *Store) CreateBucket(bucket types.BucketPayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 
@@ -77,7 +77,7 @@ func (s *Store) GetBucketByID(bucketID uuid.UUID) (*types.Bucket, error) {
 
 }
 
-func (s *Store) UpdateBucket(bucket types.UpdateBucketPayload) error {
+func (s *Store) UpdateBucket(bucket types.BucketPayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

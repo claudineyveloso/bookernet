@@ -20,7 +20,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateAddress(address types.CreateAddressPayload) error {
+func (s *Store) CreateAddress(address types.AddressPayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

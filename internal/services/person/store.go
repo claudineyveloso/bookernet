@@ -20,7 +20,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreatePerson(person types.CreatePersonPayload) error {
+func (s *Store) CreatePerson(person types.PersonPayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

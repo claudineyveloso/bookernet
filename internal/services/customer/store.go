@@ -20,7 +20,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateCustomer(customer types.CreateCustomerPayload) (uuid.UUID, error) {
+func (s *Store) CreateCustomer(customer types.CustomerPayload) (uuid.UUID, error) {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

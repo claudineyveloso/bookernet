@@ -27,7 +27,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateTypeService(w http.ResponseWriter, r *http.Request) {
-	var typeService types.CreateTypeServicePayload
+	var typeService types.TypeServicePayload
 	if err := utils.ParseJSON(r, &typeService); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

@@ -28,7 +28,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
-	var customer types.CreateCustomerPayload
+	var customer types.CustomerPayload
 	if err := utils.ParseJSON(r, &customer); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
@@ -44,7 +44,7 @@ func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person := types.CreatePersonPayload{
+	person := types.PersonPayload{
 		FirstName:      customer.Person.FirstName,
 		LastName:       customer.Person.LastName,
 		Email:          customer.Person.Email,
@@ -59,7 +59,7 @@ func (h *Handler) handleCreateCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	address := types.CreateAddressPayload{
+	address := types.AddressPayload{
 		PublicPlace:     customer.Address.PublicPlace,
 		Complement:      customer.Address.Complement,
 		Neighborhood:    customer.Address.Neighborhood,

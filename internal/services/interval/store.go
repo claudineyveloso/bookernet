@@ -19,7 +19,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateInterval(interval types.CreateIntervalPayload) error {
+func (s *Store) CreateInterval(interval types.IntervalPayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

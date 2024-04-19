@@ -27,7 +27,7 @@ func (h *Handler) RegisterRoutes(routes *mux.Router) {
 }
 
 func (h *Handler) handleCreateAttendance(w http.ResponseWriter, r *http.Request) {
-  var attendance types.CreateAttendancePayload
+  var attendance types.AttendancePayload
   if err := utils.ParseJSON(r, &attendance); err != nil {
     utils.WriteError(w, http.StatusBadRequest, err)
     return

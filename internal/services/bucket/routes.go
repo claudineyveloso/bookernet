@@ -32,7 +32,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateBucket(w http.ResponseWriter, r *http.Request) {
-	var bucket types.CreateBucketPayload
+	var bucket types.BucketPayload
 	if err := utils.ParseJSON(r, &bucket); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
@@ -67,7 +67,7 @@ func (h *Handler) handleCreateBucket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleUpdateBucket(w http.ResponseWriter, r *http.Request) {
-	var bucket types.UpdateBucketPayload
+	var bucket types.BucketPayload
 	if err := utils.ParseJSON(r, &bucket); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

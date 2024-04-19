@@ -29,7 +29,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateInterval(w http.ResponseWriter, r *http.Request) {
-	var interval types.CreateIntervalPayload
+	var interval types.IntervalPayload
 	if err := utils.ParseJSON(r, &interval); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

@@ -18,7 +18,7 @@ func NewHandler(personStore types.PersonStore) *Handler {
 }
 
 func (h *Handler) handleCreatePerson(w http.ResponseWriter, r *http.Request) {
-	var person types.CreatePersonPayload
+	var person types.PersonPayload
 	if err := utils.ParseJSON(r, &person); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

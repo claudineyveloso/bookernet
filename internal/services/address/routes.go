@@ -16,7 +16,7 @@ func NewHandler(addressStore types.AddressStore) *Handler {
 }
 
 func (h *Handler) handleCreateAddress(w http.ResponseWriter, r *http.Request) {
-	var address types.CreateAddressPayload
+	var address types.AddressPayload
 	if err := utils.ParseJSON(r, &address); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

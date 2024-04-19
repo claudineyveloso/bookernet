@@ -19,7 +19,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateAttendance(attendance types.CreateAttendancePayload) error {
+func (s *Store) CreateAttendance(attendance types.AttendancePayload) error {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

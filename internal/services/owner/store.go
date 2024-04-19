@@ -20,7 +20,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateOwner(owner types.CreateOwnerPayload) (uuid.UUID, error) {
+func (s *Store) CreateOwner(owner types.OwnerPayload) (uuid.UUID, error) {
 	queries := db.New(s.db)
 	ctx := context.Background()
 

@@ -110,7 +110,7 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 // }
 
 func (h *Handler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
-	var user types.CreateUserPayload
+	var user types.UserPayload
 	if err := utils.ParseJSON(r, &user); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return

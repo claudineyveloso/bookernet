@@ -28,7 +28,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
-	var owner types.CreateOwnerPayload
+	var owner types.OwnerPayload
 	if err := utils.ParseJSON(r, &owner); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
@@ -44,7 +44,7 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person := types.CreatePersonPayload{
+	person := types.PersonPayload{
 		FirstName:      owner.Person.FirstName,
 		LastName:       owner.Person.LastName,
 		Email:          owner.Person.Email,
@@ -58,7 +58,7 @@ func (h *Handler) handleCreateOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	address := types.CreateAddressPayload{
+	address := types.AddressPayload{
 		PublicPlace:     owner.Address.PublicPlace,
 		Complement:      owner.Address.Complement,
 		Neighborhood:    owner.Address.Neighborhood,
